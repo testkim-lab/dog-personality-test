@@ -101,6 +101,9 @@
     background: var(--surface); border: 1px dashed var(--line);
     border-radius: 10px; color: var(--ink-soft); font-size: 12px;
   }
+  .coupang-banner-wrap {
+    display: flex; justify-content: center; margin: 16px 0;
+  }
   .modal {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
@@ -189,6 +192,14 @@
 이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.<br>
 이 포스팅은 네이버 쇼핑 커넥트 활동의 일환으로, 판매 발생 시 수수료를 제공받습니다.
       </p>
+    </div>
+
+    <!-- 쿠팡파트너스 배너 위젯 (애드센스 승인과 무관하게 즉시 노출) -->
+    <div class="coupang-banner-wrap">
+      <script src="https://ads-partners.coupang.com/g.js"></script>
+      <script>
+        new PartnersCoupang.G({"id":1005995,"template":"banner","trackingCode":"AF2771551","width":"120","height":"60"});
+      </script>
     </div>
 
     <div class="share-row">
