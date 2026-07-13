@@ -3,30 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>내 성격에 맞는 강아지 종류 테스트 | 나에게 어울리는 반려견 찾기</title>
-<meta name="description" content="12가지 질문으로 알아보는 내 성격에 딱 맞는 강아지 품종! 말티즈, 골든리트리버, 진돗개, 푸들, 포메라니안 등 12가지 성격 유형별 반려견 추천 테스트. 무료 1분 테스트.">
-<meta name="keywords" content="강아지 종류 테스트, 나에게 맞는 강아지, 성격별 반려견 추천, 강아지 품종 테스트, 반려견 테스트">
-<!-- Open Graph (SNS 공유) -->
+<title>테스트빵 🍞 | 심심할 때 하는 무료 성격 테스트 모음</title>
+<meta name="description" content="1분이면 끝나는 무료 성격 테스트 모음. 심심할 때 딱 좋은 테스트빵에서 나에게 맞는 걸 골라 해보세요.">
+<meta name="keywords" content="무료 성격테스트, 심심풀이 테스트, 재밌는 테스트 모음, 온라인 테스트, 테스트빵">
 <meta property="og:type" content="website">
-<meta property="og:title" content="내 성격에 맞는 강아지는? 🐶 1분 테스트">
-<meta property="og:description" content="10가지 질문으로 찾는 나만의 반려견! 당신의 성격 유형에 딱 맞는 강아지 품종을 알려드려요.">
-<meta property="og:image" content="images/og-thumbnail.jpg">
+<meta property="og:title" content="테스트빵 🍞 심심할 때 하는 테스트 모음">
+<meta property="og:description" content="1분이면 끝나는 무료 성격 테스트들. 하나씩 골라 먹듯 가볍게 즐겨보세요.">
 <meta name="twitter:card" content="summary_large_image">
 <!--
-  [애드센스 광고 코드 자리 1/3 - 헤더]
+  [애드센스 광고 코드 자리 - 헤더]
   애드센스 승인 후 아래 주석을 실제 코드로 교체:
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXX" crossorigin="anonymous"></script>
 -->
 <style>
   :root {
-    --bg: #faf7f2;
+    --bg: #fdf8f0;
     --surface: #ffffff;
-    --ink: #3a2e25;
-    --ink-soft: #8a7a6b;
-    --line: #e8ddd0;
-    --accent: #c96f3b;
-    --accent-deep: #a5552a;
-    --accent-soft: #f7e8dc;
+    --ink: #3a2e1f;
+    --ink-soft: #8a7a63;
+    --line: #ecdfc7;
+    --accent: #c9974a;
+    --accent-deep: #a8762e;
+    --accent-soft: #f6e8ce;
   }
   * { box-sizing: border-box; }
   body {
@@ -36,656 +34,91 @@
     font-family: "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
     line-height: 1.6;
   }
-  .wrap { max-width: 560px; margin: 0 auto; padding: 24px 16px 60px; }
-  header { text-align: center; padding: 16px 0 8px; }
-  .eyebrow { font-size: 13px; letter-spacing: .1em; color: var(--accent); font-weight: 700; margin: 0; }
-  h1 { font-size: 26px; margin: 8px 0 4px; line-height: 1.35; }
-  .sub { color: var(--ink-soft); font-size: 15px; margin: 0 0 20px; }
-  .card {
-    background: var(--surface); border: 1px solid var(--line);
-    border-radius: 14px; padding: 24px 20px; box-shadow: 0 2px 8px rgba(90,60,30,.05);
-  }
-  .btn {
-    display: block; width: 100%; border: none; cursor: pointer;
-    background: var(--accent); color: #fff; font-size: 17px; font-weight: 700;
-    padding: 15px; border-radius: 10px; margin-top: 10px;
-    font-family: inherit; transition: background .15s;
-  }
-  .btn:hover, .btn:focus-visible { background: var(--accent-deep); outline: 2px solid var(--accent-deep); outline-offset: 2px; }
-  .option {
-    display: block; width: 100%; text-align: left; cursor: pointer;
-    background: var(--bg); border: 1.5px solid var(--line); color: var(--ink);
-    font-size: 15px; padding: 13px 15px; border-radius: 10px; margin-top: 10px;
-    font-family: inherit; transition: border-color .15s, background .15s;
-  }
-  .option:hover, .option:focus-visible { border-color: var(--accent); background: var(--accent-soft); outline: none; }
-  .progress { height: 6px; background: var(--line); border-radius: 3px; margin-bottom: 18px; overflow: hidden; }
-  .progress-fill { height: 100%; background: var(--accent); border-radius: 3px; width: 0; transition: width .3s; }
-  .qnum { font-size: 13px; color: var(--accent); font-weight: 700; margin: 0 0 6px; }
-  .qtext { font-size: 18px; font-weight: 700; margin: 0 0 8px; line-height: 1.4; }
-  .result-photo {
-    width: 100%; aspect-ratio: 4/3; object-fit: cover;
-    border-radius: 12px; background: var(--accent-soft);
-    display: block; margin-bottom: 16px;
-  }
-  .photo-fallback {
-    width: 100%; aspect-ratio: 4/3; border-radius: 12px;
-    background: linear-gradient(135deg, var(--accent-soft), #f3d9c3);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 72px; margin-bottom: 16px;
-  }
-  .result-type { font-size: 14px; color: var(--accent); font-weight: 700; margin: 0; }
-  .result-name { font-size: 26px; font-weight: 800; margin: 4px 0 12px; }
-  .result-desc { font-size: 15px; margin: 0 0 16px; }
-  .trait-box { background: var(--bg); border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; font-size: 14px; }
-  .trait-box h3 { font-size: 14px; margin: 0 0 6px; color: var(--accent-deep); }
-  .trait-box p { margin: 0; }
-  .shop-box {
-    border: 1.5px dashed var(--accent); border-radius: 10px;
-    padding: 14px 16px; margin: 16px 0; font-size: 14px;
-  }
-  .shop-box h3 { font-size: 14px; margin: 0 0 8px; }
-  .shop-box a { color: var(--accent-deep); font-weight: 700; }
-  .share-row { display: flex; gap: 8px; margin-top: 14px; }
-  .share-row .btn { margin-top: 0; font-size: 15px; padding: 12px; }
-  .btn.ghost { background: var(--surface); color: var(--accent-deep); border: 1.5px solid var(--accent); }
-  .btn.ghost:hover { background: var(--accent-soft); }
-  /* 애드센스 승인 전까지 광고 자리 숨김.
-     승인 후: 아래 display:none 줄을 지우고, ad-slot div 안에 애드센스 코드를 붙여넣으면 됨 */
+  .wrap { max-width: 560px; margin: 0 auto; padding: 32px 16px 60px; }
+  header { text-align: center; padding: 8px 0 28px; }
+  .eyebrow { font-size: 13px; letter-spacing: .1em; color: var(--accent-deep); font-weight: 700; margin: 0; }
+  h1 { font-size: 30px; margin: 10px 0 6px; line-height: 1.3; }
+  .sub { color: var(--ink-soft); font-size: 15px; margin: 0; }
   .ad-slot { display: none; }
-  .ad-slot-placeholder {
-    margin: 20px 0; padding: 30px 16px; text-align: center;
-    background: var(--surface); border: 1px dashed var(--line);
-    border-radius: 10px; color: var(--ink-soft); font-size: 12px;
+  .list { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+  .test-card {
+    display: flex; align-items: center; gap: 16px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 16px; padding: 18px 20px;
+    text-decoration: none; color: inherit;
+    box-shadow: 0 2px 10px rgba(120, 90, 40, .06);
+    transition: transform .15s, box-shadow .15s;
   }
-  .modal {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
-    z-index: 1000;
+  .test-card:hover, .test-card:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(120, 90, 40, .12);
+    outline: none;
   }
-  .modal-content {
-    background: var(--surface); border-radius: 14px; padding: 24px; max-width: 90%;
-    position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  .test-emoji {
+    flex: none; width: 56px; height: 56px; border-radius: 14px;
+    background: var(--accent-soft); display: flex; align-items: center; justify-content: center;
+    font-size: 30px;
   }
-  .modal-close {
-    position: absolute; top: 12px; right: 12px; background: none; border: none;
-    font-size: 24px; cursor: pointer; color: var(--ink-soft);
+  .test-info { flex: 1; min-width: 0; }
+  .test-tag { font-size: 12px; color: var(--accent-deep); font-weight: 700; margin: 0 0 3px; }
+  .test-title { font-size: 17px; font-weight: 800; margin: 0 0 3px; }
+  .test-desc { font-size: 13px; color: var(--ink-soft); margin: 0; }
+  .test-arrow { flex: none; font-size: 20px; color: var(--accent); }
+  .coming-soon {
+    text-align: center; padding: 28px 16px; margin-top: 4px;
+    border: 1.5px dashed var(--line); border-radius: 16px;
+    color: var(--ink-soft); font-size: 13px;
   }
-  .modal h3 { margin: 0 0 16px; font-size: 18px; }
-  .share-buttons {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-  }
-  .share-btn {
-    padding: 12px; border: 1.5px solid var(--line); background: var(--surface);
-    border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 600;
-    transition: all 0.2s; color: var(--ink);
-  }
-  .share-btn:hover { border-color: var(--accent); background: var(--accent-soft); }
-  .hidden { display: none; }
-  .toast {
-    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
-    background: var(--ink); color: #fff; font-size: 14px; font-weight: 600;
-    padding: 12px 20px; border-radius: 999px; box-shadow: 0 4px 16px rgba(0,0,0,.25);
-    z-index: 2000; opacity: 0; pointer-events: none; transition: opacity .2s;
-    max-width: 88%; text-align: center;
-  }
-  .toast.show { opacity: 1; }
-  footer { text-align: center; font-size: 12px; color: var(--ink-soft); margin-top: 40px; }
-  @media (prefers-reduced-motion: reduce) { .progress-fill { transition: none; } }
+  footer { text-align: center; font-size: 12px; color: var(--ink-soft); margin-top: 44px; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <p class="eyebrow">무료 성격 테스트 · 1분 소요</p>
-    <h1>내 성격에 맞는<br>강아지 종류 테스트 🐶</h1>
-    <p class="sub">12가지 질문으로 찾는 나에게 딱 맞는 반려견</p>
+    <p class="eyebrow">FREE TEST · 무료 테스트 모음</p>
+    <h1>테스트빵 🍞</h1>
+    <p class="sub">심심할 때 하나씩 골라 먹는 1분 테스트</p>
   </header>
 
-  <!-- [애드센스 광고 자리 2/3 - 본문 상단] -->
+  <!-- [애드센스 광고 자리 - 본문 상단] -->
   <div class="ad-slot">광고 영역 (애드센스 승인 후 표시)</div>
 
-  <!-- 시작 화면 -->
-  <div id="screen-start" class="card">
-    <p style="margin:0 0 4px; font-size:15px;">
-      활발한 <strong>웰시코기</strong>? 의리파 <strong>진돗개</strong>? 애교쟁이 <strong>말티즈</strong>?<br>
-      당신의 성격 유형을 분석해서 <strong>12가지 품종</strong> 중
-      가장 잘 맞는 강아지를 알려드려요.
-    </p>
-    <button class="btn" onclick="startTest()">테스트 시작하기</button>
-  </div>
+  <div class="list" id="test-list"></div>
 
-  <!-- 질문 화면 -->
-  <div id="screen-quiz" class="card hidden">
-    <div class="progress"><div class="progress-fill" id="progress-fill"></div></div>
-    <p class="qnum" id="qnum"></p>
-    <p class="qtext" id="qtext"></p>
-    <div id="options"></div>
-  </div>
-
-  <!-- 결과 화면 -->
-  <div id="screen-result" class="card hidden">
-    <p class="result-type" id="r-type"></p>
-    <p class="result-name" id="r-name"></p>
-    <img class="result-photo hidden" id="r-photo" alt="">
-    <div class="photo-fallback" id="r-emoji"></div>
-    <p class="result-desc" id="r-desc"></p>
-    <div class="trait-box"><h3>💡 이 강아지와 잘 맞는 이유</h3><p id="r-why"></p></div>
-    <div class="trait-box"><h3>🏠 키울 때 알아두세요</h3><p id="r-tip"></p></div>
-
-    <!-- 쿠팡 파트너스 제휴 링크 자리: 결과별 추천 상품 -->
-    <div class="shop-box">
-      <h3>🛒 <span id="r-breed-shop"></span> 맞춤 준비물</h3>
-      <p id="r-shop-desc" style="margin:0 0 6px;"></p>
-      <a id="r-shop-link" href="#" target="_blank" rel="noopener sponsored">쿠팡에서 추천 용품 보기 →</a><br>
-      <a id="r-naver-link" href="#" target="_blank" rel="noopener sponsored" style="font-size:13px;">네이버쇼핑에서 보기 →</a>
-      <p style="font-size:11px; color:var(--ink-soft); margin:8px 0 0;">
-이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.<br>
-이 포스팅은 네이버 쇼핑 커넥트 활동의 일환으로, 판매 발생 시 수수료를 제공받습니다.
-      </p>
-    </div>
-
-    <div class="share-row">
-      <button class="btn" onclick="openShareModal()">결과 공유하기</button>
-      <button class="btn ghost" onclick="location.reload()">다시 하기</button>
-    </div>
-
-    <!-- 공유 모달 -->
-    <div id="shareModal" class="modal hidden">
-      <div class="modal-content">
-        <button class="modal-close" onclick="closeShareModal()">✕</button>
-        <h3>결과 공유하기</h3>
-        <div class="share-buttons">
-          <button class="share-btn native-share" id="btn-native-share" onclick="handleShare()">🖼️ 이미지로 공유</button>
-          <button class="share-btn test-share" id="btn-test-share" onclick="shareTestLink()">🔗 테스트 공유하기</button>
-          <button class="share-btn capture" id="btn-save-image" onclick="handleSaveImage()">📥 이미지 저장</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- [애드센스 광고 자리 3/3 - 결과 하단] -->
-  <div class="ad-slot">광고 영역 (애드센스 승인 후 표시)</div>
+  <div class="coming-soon">🥐 다음 테스트도 곧 구워서 올게요</div>
 
   <footer>
-    <p>© 2026 성격 테스트 연구소 · 재미로 보는 테스트입니다</p>
-    <p>품종 사진: <a href="https://commons.wikimedia.org/" target="_blank" rel="noopener" style="color:inherit;">Wikimedia Commons</a> (자유 라이선스, 개별 출처는 images/CREDITS.txt)</p>
+    <p>© 2026 테스트빵 · 재미로 보는 테스트입니다</p>
   </footer>
 </div>
 
-<div id="modal-root"></div>
-<div id="toast" class="toast"></div>
-<canvas id="share-canvas" width="1080" height="1350" class="hidden"></canvas>
-
 <script>
-// ── 8가지 성격 유형 × 품종 매핑 ──────────────────────────
-const BREEDS = {
-  corgi:  { type:"에너지 폭발 인싸형",  name:"웰시코기",     emoji:"🐕", photo:"images/corgi.jpg",
-    desc:"당신은 가만히 있으면 몸이 근질근질한 에너자이저! 짧은 다리로도 세상에서 제일 신나게 뛰어다니는 웰시코기가 당신의 산책 메이트입니다.",
-    why:"활동량이 많고 명랑한 당신처럼, 코기도 놀이와 산책을 사랑하는 활발한 견종이에요. 서로 지치지 않는 환상의 콤비!",
-    tip:"운동량이 많이 필요해요. 하루 2회 산책은 필수! 허리가 긴 체형이라 계단·소파 점프는 조심해 주세요.",
-    shop:"산책·놀이용품", shopDesc:"리드줄, 노즈워크 장난감, 관절 영양제", shopLink:"https://link.coupang.com/a/fgNyJojG44" },
-  golden: { type:"다정한 리더형",       name:"골든리트리버",  emoji:"🦮", photo:"images/golden.jpg",
-    desc:"모두를 품어주는 따뜻한 리더인 당신. 세상에서 가장 순한 대형견 골든리트리버와 함께라면 온 동네 인기쟁이가 됩니다.",
-    why:"사람을 좋아하고 두루 잘 지내는 당신처럼, 골든리트리버도 다정함의 대명사예요. 아이들·다른 반려동물과도 잘 지냅니다.",
-    tip:"대형견이라 충분한 공간과 운동이 필요해요. 털빠짐이 많아 주 2~3회 빗질을 추천합니다.",
-    shop:"대형견 용품", shopDesc:"대형견 사료, 브러시, 대형 방석", shopLink:"https://link.coupang.com/a/fgNyJojG44" },
-  jindo:  { type:"의리파 독립형",       name:"진돗개",       emoji:"🐕‍🦺", photo:"images/jindo.jpg",
-    desc:"겉은 차갑지만 속은 뜨거운 츤데레! 한번 마음을 준 사람에게 평생 충성하는 진돗개가 당신의 소울메이트입니다.",
-    why:"혼자만의 시간을 즐기면서도 소중한 사람에겐 한없이 의리 있는 당신과, 주인 바라기 진돗개는 닮은꼴이에요.",
-    tip:"독립심과 경계심이 강해 어릴 때부터 사회화 훈련이 중요해요. 한 명의 보호자와 깊은 유대를 맺는 스타일입니다.",
-    shop:"훈련·급여용품", shopDesc:"훈련 간식, 하네스, 켄넬", shopLink:"https://link.coupang.com/a/fgNyJojG44" },
-  poodle: { type:"섬세한 완벽주의형",   name:"푸들",         emoji:"🐩", photo:"images/poodle.jpg",
-    desc:"디테일에 강하고 감각적인 당신. 견종 지능 랭킹 2위, 우아하고 영리한 푸들이 당신의 클래스에 어울립니다.",
-    why:"똑똑하고 세심한 당신처럼 푸들은 학습 능력이 뛰어나고 눈치가 빨라요. 교감의 깊이가 다릅니다.",
-    tip:"곱슬 털이라 털빠짐은 적지만 미용은 필수! 4~6주마다 미용 일정을 잡아주세요. 두뇌 놀이를 좋아해요.",
-    shop:"미용·두뇌놀이용품", shopDesc:"미용 가위 세트, 퍼즐 장난감, 저자극 샴푸", shopLink:"https://link.coupang.com/a/fgNyJojG44" },
-  shihtzu:{ type:"느긋한 집콕형",       name:"시추",         emoji:"🐶", photo:"images/shihtzu.jpg",
-    desc:"집이 세상에서 제일 좋은 당신. 소파 위 뒹굴거림이 취미인 순둥이 시추와 함께라면 집콕 라이프가 완성됩니다.",
-    why:"느긋하고 평화로운 당신처럼 시추도 짖음이 적고 얌전한 실내 생활의 최강자예요. 최고의 넷플릭스 메이트!",
-    tip:"활동량이 적어 아파트에서 키우기 좋아요. 눈이 커서 눈 관리, 얼굴 주름 관리를 챙겨주세요.",
-    shop:"실내 생활용품", shopDesc:"쿠션 방석, 눈 세정제, 실내 배변패드", shopLink:"https://link.coupang.com/a/fgNyJojG44" },
-  chihua: { type:"애교만렙 껌딱지형",   name:"치와와",       emoji:"🐕", photo:"images/chihuahua.jpg",
-    desc:"작지만 존재감은 최강! 좋아하는 사람 곁에 껌딱지처럼 붙어있는 당신에겐 세상에서 제일 작은 심장 부자 치와와가 딱입니다.",
-    why:"애정표현이 확실한 당신처럼 치와와도 좋아하는 사람에게 온 마음을 다해요. 1인 가구 최고의 단짝!",
-    tip:"몸집이 작아 추위에 약해요. 겨울엔 옷을 입혀주시고, 소형견 전용 사료와 계단으로 무릎을 보호해 주세요.",
-    shop:"소형견 용품", shopDesc:"강아지 옷, 소형견 사료, 반려견 계단", shopLink:"https://link.coupang.com/a/fgNyJojG44" },
-  border: { type:"계획적인 성취형",     name:"보더콜리",     emoji:"🐕‍🦺", photo:"images/border.jpg",
-    desc:"목표를 세우고 해내는 당신. 견종 지능 1위, 일 잘하는 천재견 보더콜리가 당신의 파트너입니다.",
-    why:"성취 지향적인 당신처럼 보더콜리도 미션을 줄 때 가장 행복한 견종이에요. 프리스비, 어질리티까지 함께 성장하는 재미!",
-    tip:"운동량과 두뇌 자극이 매우 많이 필요해요. 매일 충분한 활동을 시켜줄 수 있는 분에게만 추천합니다.",
-    shop:"액티비티 용품", shopDesc:"프리스비, 어질리티 장난감, 고단백 사료", shopLink:"https://link.coupang.com/a/fgNyJojG44" },
-  bichon: { type:"긍정 무드메이커형",   name:"비숑 프리제",   emoji:"☁️", photo:"images/bichon.jpg",
-    desc:"당신이 있는 곳엔 늘 웃음이 있죠. 구름 같은 얼굴로 모두를 웃게 하는 비숑 프리제가 당신의 텐션 메이트입니다.",
-    why:"밝고 긍정적인 당신처럼 비숑도 언제나 해맑은 강아지계의 인싸예요. 함께 있으면 우울할 틈이 없어요.",
-    tip:"하얀 털 관리가 핵심! 매일 빗질과 정기 미용이 필요해요. 분리불안이 올 수 있으니 혼자 두는 시간은 짧게.",
-    shop:"털관리 용품", shopDesc:"화이트닝 샴푸, 슬리커 브러시, 눈물자국 클리너", shopLink:"https://link.coupang.com/a/fgNyJojG44" },
-  maltese:{ type:"곁이 좋은 순정파형",   name:"말티즈",       emoji:"🐶", photo:"images/maltese.jpg",
-    desc:"사랑하는 사람 곁이 세상에서 제일 좋은 당신. 한국인이 가장 사랑하는 국민 반려견 말티즈가 당신의 평생 단짝입니다.",
-    why:"조용히 곁을 지키는 다정함이 닮았어요. 말티즈도 보호자 껌딱지로 유명한 애정 부자예요.",
-    tip:"하얀 털은 눈물자국 관리가 포인트! 실내 생활에 최적화된 소형견이라 아파트에서도 잘 지냅니다.",
-    shop:"실내·미용 용품", shopDesc:"눈물자국 클리너, 소형견 사료, 빗", shopLink:"https://link.coupang.com/a/fgNyJojG44" },
-  pome:   { type:"상큼발랄 스포트라이트형", name:"포메라니안",  emoji:"🦊", photo:"images/pomeranian.jpg",
-    desc:"어딜 가나 시선을 사로잡는 당신! 솜뭉치 같은 외모와 자신감 넘치는 성격의 포메라니안이 당신과 찰떡입니다.",
-    why:"작지만 존재감 확실한 당신처럼, 포메도 몸집보다 백 배 큰 자신감으로 사는 강아지예요.",
-    tip:"이중모라 빗질을 자주 해주세요. 짖음이 있는 편이라 어릴 때부터 차분하게 훈련하면 좋아요.",
-    shop:"미용·패션 용품", shopDesc:"슬리커 브러시, 강아지 옷, 수제 간식", shopLink:"https://link.coupang.com/a/fgNyJojG44" },
-  dachs:  { type:"호기심 대장 탐험가형", name:"닥스훈트",     emoji:"🌭", photo:"images/dachshund.jpg",
-    desc:"새로운 것을 보면 참지 못하는 당신. 킁킁대며 세상을 탐험하는 소시지 몸매의 닥스훈트가 당신의 모험 파트너입니다.",
-    why:"호기심 많고 겁 없는 당신처럼, 닥스훈트도 원래 오소리 사냥견 출신의 용감한 탐험가예요.",
-    tip:"허리가 길어 척추 건강이 핵심! 계단 오르내리기와 높은 점프는 피하고 체중 관리를 해주세요.",
-    shop:"산책·건강 용품", shopDesc:"노즈워크 매트, 관절 영양제, 슬로프 계단", shopLink:"https://link.coupang.com/a/fgNyJojG44" },
-  samoyed:{ type:"모두를 녹이는 힐링형", name:"사모예드",     emoji:"☃️", photo:"images/samoyed.jpg",
-    desc:"당신의 미소는 주변을 무장해제시키죠. '미소 천사' 사모예드의 스마일과 당신의 온기가 만나면 세상이 녹습니다.",
-    why:"늘 웃는 상의 사모예드처럼, 당신도 존재만으로 사람들을 편안하게 하는 힐러예요.",
-    tip:"풍성한 이중모라 여름 더위에 약해요. 쿨매트는 필수, 주 3회 이상 빗질해 주세요.",
-    shop:"대형견·털관리 용품", shopDesc:"쿨매트, 대형견 사료, 브러시", shopLink:"https://link.coupang.com/a/fgNyJojG44" }
-};
-
-// ── 12개 질문 (성격 차원: 활동량·사교성·계획성·애정표현·생활패턴·호기심) ──
-const QUESTIONS = [
-  { q:"주말 아침, 눈을 뜬 당신의 선택은?", o:[
-    ["밖으로 나가 운동이나 나들이!", {corgi:2, dachs:1}],
-    ["친구들 불러서 브런치 약속", {golden:2, bichon:1}],
-    ["이불 속에서 넷플릭스 정주행", {shihtzu:2, maltese:1}],
-    ["혼자 취미 생활에 몰입", {jindo:2, poodle:1}] ]},
-  { q:"처음 가는 모임에서 나는?", o:[
-    ["분위기를 주도하는 편", {bichon:2, pome:1}],
-    ["금방 두루두루 친해짐", {golden:2, samoyed:1}],
-    ["친한 사람 옆에만 있음", {maltese:2, chihua:1}],
-    ["일단 관찰하고 천천히 다가감", {jindo:2, border:1}] ]},
-  { q:"나의 계획 스타일은?", o:[
-    ["분 단위로 계획해야 마음이 편함", {border:2, poodle:1}],
-    ["큰 틀만 잡고 유연하게", {golden:2, jindo:1}],
-    ["계획? 일단 저지르고 봄!", {dachs:2, corgi:1}],
-    ["흘러가는 대로 사는 게 최고", {shihtzu:2, samoyed:1}] ]},
-  { q:"좋아하는 사람에게 나는?", o:[
-    ["스킨십과 표현을 아끼지 않음", {chihua:2, maltese:1}],
-    ["말없이 곁에 있어주는 편", {samoyed:2, shihtzu:1}],
-    ["행동으로 티 안 나게 챙김", {jindo:2, border:1}],
-    ["세심하게 기억하고 감동을 줌", {poodle:2, golden:1}] ]},
-  { q:"하루 중 집에 있는 시간은?", o:[
-    ["잠잘 때 빼곤 거의 밖에 있음", {corgi:2, border:1}],
-    ["반반 정도?", {bichon:2, golden:1}],
-    ["집이 제일 좋아, 웬만하면 집", {maltese:2, shihtzu:1}],
-    ["집에 있어도 뭔가 하느라 바쁨", {poodle:2, dachs:1}] ]},
-  { q:"스트레스가 쌓이면 나는?", o:[
-    ["몸을 움직여서 날려버림", {border:2, corgi:1}],
-    ["친구 만나 수다로 해소", {pome:2, bichon:1}],
-    ["일단 자고 본다", {shihtzu:2, chihua:1}],
-    ["혼자 조용히 생각을 정리", {jindo:2, poodle:1}] ]},
-  { q:"내가 꿈꾸는 여행은?", o:[
-    ["서핑, 등산! 액티비티 가득", {dachs:2, corgi:1}],
-    ["현지인처럼 맛집과 사람 구경", {bichon:2, pome:1}],
-    ["감성 숙소에서 뒹굴뒹굴", {chihua:2, maltese:1}],
-    ["계획표대로 명소 완전 정복", {border:2, poodle:1}] ]},
-  { q:"지금 내 방 상태는?", o:[
-    ["모델하우스급으로 깔끔", {poodle:2, border:1}],
-    ["나만 아는 질서가 있음", {jindo:2, dachs:1}],
-    ["어지럽지만 편안한 무질서", {shihtzu:2, corgi:1}],
-    ["치웠다가 어질렀다가 반복", {pome:2, bichon:1}] ]},
-  { q:"친구가 고민을 털어놓으면?", o:[
-    ["현실적인 해결책부터 제시", {border:2, jindo:1}],
-    ["'헐 진짜? 어떡해' 리액션 부자", {bichon:2, pome:1}],
-    ["말없이 곁을 지켜줌", {maltese:2, samoyed:1}],
-    ["원인부터 차근차근 같이 분석", {poodle:2, golden:1}] ]},
-  { q:"사람들이 말하는 나의 첫인상은?", o:[
-    ["에너지가 넘친다", {corgi:2, pome:1}],
-    ["다정하고 편안하다", {samoyed:2, golden:1}],
-    ["차분하고 여유있다", {shihtzu:2, maltese:1}],
-    ["믿음직하고 단단하다", {jindo:2, border:1}] ]},
-  { q:"나의 SNS 스타일은?", o:[
-    ["셀카·일상을 자주 올림", {pome:2, bichon:1}],
-    ["구경만 하는 눈팅족", {maltese:2, shihtzu:1}],
-    ["정보·리뷰 위주로 활용", {poodle:2, border:1}],
-    ["계정만 있고 잘 안 들어감", {jindo:2, samoyed:1}] ]},
-  { q:"처음 보는 것을 발견하면?", o:[
-    ["일단 해봄! 호기심 폭발", {dachs:2, corgi:1}],
-    ["재밌겠다, 같이 할 사람 모음", {golden:2, bichon:1}],
-    ["검증된 것만 하는 편", {jindo:2, poodle:1}],
-    ["흥미가 생기면 천천히 시도", {samoyed:2, chihua:1}] ]}
-];
-
-let current = 0;
-const scores = {};
-Object.keys(BREEDS).forEach(k => scores[k] = 0);
-
-function startTest() {
-  document.getElementById("screen-start").classList.add("hidden");
-  document.getElementById("screen-quiz").classList.remove("hidden");
-  showQuestion();
-}
-
-function showQuestion() {
-  const item = QUESTIONS[current];
-  document.getElementById("qnum").textContent = `Q${current + 1} / ${QUESTIONS.length}`;
-  document.getElementById("qtext").textContent = item.q;
-  document.getElementById("progress-fill").style.width = `${(current / QUESTIONS.length) * 100}%`;
-  const box = document.getElementById("options");
-  box.innerHTML = "";
-  item.o.forEach(([label, pts]) => {
-    const btn = document.createElement("button");
-    btn.className = "option";
-    btn.textContent = label;
-    btn.onclick = () => pick(pts);
-    box.appendChild(btn);
-  });
-
-  // 클릭한 버튼이 사라지고 같은 자리에 다음 문항 버튼이 나타나면, 마우스가 그대로
-  // 있으니 브라우저가 그 버튼을 "호버 중"으로 착각해 색이 미리 입혀지는 문제 방지
-  box.style.pointerEvents = "none";
-  requestAnimationFrame(() => requestAnimationFrame(() => { box.style.pointerEvents = ""; }));
-}
-
-function pick(pts) {
-  for (const k in pts) scores[k] += pts[k];
-  current++;
-  if (current < QUESTIONS.length) showQuestion();
-  else showResult();
-}
-
-function showResult() {
-  const winner = Object.keys(scores).reduce((a, b) => scores[b] > scores[a] ? b : a);
-  const r = BREEDS[winner];
-  document.getElementById("screen-quiz").classList.add("hidden");
-  document.getElementById("screen-result").classList.remove("hidden");
-  document.getElementById("r-type").textContent = "당신은 「" + r.type + "」";
-  document.getElementById("r-name").textContent = r.name;
-  document.getElementById("r-desc").textContent = r.desc;
-  document.getElementById("r-why").textContent = r.why;
-  document.getElementById("r-tip").textContent = r.tip;
-  document.getElementById("r-breed-shop").textContent = r.name;
-  document.getElementById("r-shop-desc").textContent = r.shopDesc;
-  document.getElementById("r-shop-link").href = r.shopLink;
-  document.getElementById("r-naver-link").href = "https://naver.me/x0OFs2EB";
-  document.getElementById("r-emoji").textContent = r.emoji;
-  // 사진이 있으면 사진 표시, 없으면 이모지 폴백
-  const img = document.getElementById("r-photo");
-  const showPhoto = () => {
-    img.classList.remove("hidden");
-    document.getElementById("r-emoji").classList.add("hidden");
-  };
-  img.onload = showPhoto;
-  img.onerror = () => {}; // 사진 실패 시 이모지 유지
-  img.src = r.photo;
-  img.alt = r.name + " 사진";
-  if (img.complete && img.naturalWidth > 0) showPhoto(); // 캐시된 사진은 즉시 표시
-  window.scrollTo({ top: 0 });
-}
-
-function openShareModal() {
-  // 공유 버튼들은 navigator.share가 없어도(PC 등) 클립보드 복사로 자동 대체되므로 항상 표시
-  document.getElementById("shareModal").classList.remove("hidden");
-}
-
-function closeShareModal() {
-  document.getElementById("shareModal").classList.add("hidden");
-}
-
-function getShareUrl() {
-  // 공유 링크는 항상 테스트 첫 화면으로 연결 (쿼리·해시 제거)
-  return location.origin + location.pathname;
-}
-
-function getShareText() {
-  const breedName = document.getElementById("r-breed-shop")?.textContent || "강아지";
-  return `내 성격에 맞는 강아지는 「${breedName}」! 너는 어떤 강아지일까? 🐶`;
-}
-
-function copyShareLink(appName) {
-  const full = getShareText() + "\n" + getShareUrl();
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(full).then(() => {
-      showToast(appName + "에 붙여넣기만 하면 돼요! (링크 복사됨 📋)");
-    }).catch(() => {
-      prompt("아래 내용을 복사해서 " + appName + "에 붙여넣으세요:", full);
-    });
-  } else {
-    prompt("아래 내용을 복사해서 " + appName + "에 붙여넣으세요:", full);
-  }
-}
-
-function showToast(msg) {
-  const el = document.getElementById("toast");
-  el.textContent = msg;
-  el.classList.add("show");
-  clearTimeout(showToast._t);
-  showToast._t = setTimeout(() => el.classList.remove("show"), 2600);
-}
-
-function dataURLtoBlob(dataUrl) {
-  const parts = dataUrl.split(",");
-  const mime = (parts[0].match(/:(.*?);/) || [,"image/png"])[1];
-  const binary = atob(parts[1]);
-  const u8arr = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) u8arr[i] = binary.charCodeAt(i);
-  return new Blob([u8arr], { type: mime });
-}
-
-// ── 결과 카드를 Canvas에 직접 그려서 공유용 이미지 생성 (외부 라이브러리 불필요) ──
-function wrapLines(ctx, text, maxWidth) {
-  const words = text.split(" ");
-  let line = "";
-  const lines = [];
-  words.forEach(word => {
-    const test = line ? line + " " + word : word;
-    if (ctx.measureText(test).width > maxWidth && line) {
-      lines.push(line);
-      line = word;
-    } else {
-      line = test;
+  const TESTS = [
+    {
+      emoji: "🐶",
+      tag: "성격 테스트 · 1분",
+      title: "내 성격에 맞는 강아지 종류 테스트",
+      desc: "12가지 질문으로 찾는 나에게 딱 맞는 반려견",
+      url: "dog-test/"
     }
+  ];
+
+  const list = document.getElementById("test-list");
+  TESTS.forEach(t => {
+    const a = document.createElement("a");
+    a.className = "test-card";
+    a.href = t.url;
+    a.innerHTML = `
+      <div class="test-emoji">${t.emoji}</div>
+      <div class="test-info">
+        <p class="test-tag">${t.tag}</p>
+        <p class="test-title">${t.title}</p>
+        <p class="test-desc">${t.desc}</p>
+      </div>
+      <div class="test-arrow">→</div>
+    `;
+    list.appendChild(a);
   });
-  if (line) lines.push(line);
-  return lines;
-}
-
-function drawLines(ctx, lines, x, y, lineHeight) {
-  lines.forEach((l, i) => ctx.fillText(l, x, y + i * lineHeight));
-  return y + lines.length * lineHeight;
-}
-
-function drawRoundedRect(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.arcTo(x + w, y, x + w, y + h, r);
-  ctx.arcTo(x + w, y + h, x, y + h, r);
-  ctx.arcTo(x, y + h, x, y, r);
-  ctx.arcTo(x, y, x + w, y, r);
-  ctx.closePath();
-}
-
-function drawShareCanvas(r) {
-  const canvas = document.getElementById("share-canvas");
-  const ctx = canvas.getContext("2d");
-  const W = 1080;
-  const cx = W / 2;
-  const boxX = 70, boxW = W - 140, boxPad = 32;
-  const descStartY = 700, descLineHeight = 42;
-  const whyLineHeight = 38;
-
-  // ── 1단계: 실제 그리기 전에 필요한 세로 길이부터 계산 (텍스트 길이에 따라 캔버스 높이가 달라짐) ──
-  canvas.width = W; canvas.height = 100;
-  ctx.font = "28px 'Malgun Gothic', sans-serif";
-  const descLines = wrapLines(ctx, r.desc, boxW - 40);
-  ctx.font = "26px 'Malgun Gothic', sans-serif";
-  const whyLines = wrapLines(ctx, r.why, boxW - boxPad * 2);
-
-  const descEndY = descStartY + descLines.length * descLineHeight;
-  const boxY = descEndY + 40;
-  const boxH = 56 + whyLines.length * whyLineHeight + boxPad;
-  const H = boxY + boxH + 40 + 140; // 박스 하단 여백 + 하단 브랜드 바
-
-  // ── 2단계: 확정된 크기로 캔버스를 맞추고 실제로 그리기 ──
-  canvas.width = W; canvas.height = H;
-
-  const bg = ctx.createLinearGradient(0, 0, 0, H);
-  bg.addColorStop(0, "#faf7f2");
-  bg.addColorStop(1, "#f7e8dc");
-  ctx.fillStyle = bg;
-  ctx.fillRect(0, 0, W, H);
-
-  ctx.textAlign = "center";
-  ctx.fillStyle = "#c96f3b";
-  ctx.font = "bold 30px 'Malgun Gothic', sans-serif";
-  ctx.fillText("무료 성격 테스트 · 강아지 종류 테스트 🐶", cx, 110);
-
-  // 원형 배지: 실제 견종 사진(페이지에 이미 로드되어 있음)을 우선 사용, 없으면 이모지로 대체
-  const photoEl = document.getElementById("r-photo");
-  const hasPhoto = photoEl && !photoEl.classList.contains("hidden") && photoEl.complete && photoEl.naturalWidth > 0;
-  ctx.save();
-  ctx.beginPath();
-  ctx.arc(cx, 320, 160, 0, Math.PI * 2);
-  ctx.closePath();
-  if (hasPhoto) {
-    ctx.clip();
-    const iw = photoEl.naturalWidth, ih = photoEl.naturalHeight;
-    const size = Math.min(iw, ih);
-    const sx = (iw - size) / 2, sy = (ih - size) / 2;
-    ctx.drawImage(photoEl, sx, sy, size, size, cx - 160, 160, 320, 320);
-  } else {
-    ctx.fillStyle = "#f3d9c3";
-    ctx.fill();
-  }
-  ctx.restore();
-  if (!hasPhoto) {
-    ctx.font = "170px sans-serif";
-    ctx.textBaseline = "middle";
-    ctx.fillText(r.emoji, cx, 330);
-    ctx.textBaseline = "alphabetic";
-  }
-
-  ctx.fillStyle = "#a5552a";
-  ctx.font = "bold 34px 'Malgun Gothic', sans-serif";
-  ctx.fillText("당신은 「" + r.type + "」", cx, 550);
-
-  ctx.fillStyle = "#3a2e25";
-  ctx.font = "bold 62px 'Malgun Gothic', sans-serif";
-  ctx.fillText(r.name, cx, 628);
-
-  ctx.fillStyle = "#3a2e25";
-  ctx.font = "28px 'Malgun Gothic', sans-serif";
-  drawLines(ctx, descLines, cx, descStartY, descLineHeight);
-
-  // "이 강아지와 잘 맞는 이유" 박스
-  ctx.fillStyle = "#ffffff";
-  drawRoundedRect(ctx, boxX, boxY, boxW, boxH, 18);
-  ctx.fill();
-  ctx.textAlign = "left";
-  ctx.fillStyle = "#a5552a";
-  ctx.font = "bold 26px 'Malgun Gothic', sans-serif";
-  ctx.fillText("💡 이 강아지와 잘 맞는 이유", boxX + boxPad, boxY + 48);
-  ctx.fillStyle = "#3a2e25";
-  ctx.font = "26px 'Malgun Gothic', sans-serif";
-  drawLines(ctx, whyLines, boxX + boxPad, boxY + 92, whyLineHeight);
-  ctx.textAlign = "center";
-
-  // 하단 브랜드 바
-  ctx.fillStyle = "#c96f3b";
-  ctx.fillRect(0, H - 140, W, 140);
-  ctx.fillStyle = "#ffffff";
-  ctx.font = "bold 34px 'Malgun Gothic', sans-serif";
-  ctx.fillText("나도 내 성격에 맞는 강아지 찾아보기 →", cx, H - 78);
-  ctx.font = "24px 'Malgun Gothic', sans-serif";
-  ctx.fillText(getShareUrl().replace(/^https?:\/\//, ""), cx, H - 38);
-
-  return canvas;
-}
-
-function showImagePreviewModal(dataUrl) {
-  const root = document.getElementById("modal-root");
-  root.innerHTML =
-    '<div class="modal" id="image-modal-backdrop">' +
-      '<div class="modal-content" style="text-align:center;">' +
-        '<button class="modal-close" id="image-modal-close">✕</button>' +
-        '<h3>이미지를 길게 눌러 저장하세요</h3>' +
-        '<img src="' + dataUrl + '" alt="테스트 결과 이미지" style="width:100%;border-radius:12px;border:1px solid var(--line);margin:12px 0 4px;">' +
-      '</div>' +
-    '</div>';
-  const closeModal = () => { root.innerHTML = ""; };
-  document.getElementById("image-modal-backdrop").addEventListener("click", e => { if (e.target.id === "image-modal-backdrop") closeModal(); });
-  document.getElementById("image-modal-close").addEventListener("click", closeModal);
-}
-
-// iOS는 <a download>가 새 탭으로 이미지를 열어버릴 뿐 실제 저장은 안 되는 경우가 많고,
-// 안드로이드도 브라우저별 편차가 커서 터치 기기는 전부 "길게 눌러 저장" 모달로 통일
-function isTouchDevice() {
-  return navigator.maxTouchPoints > 0 || "ontouchstart" in window;
-}
-
-function handleSaveImage() {
-  const winner = Object.keys(scores).reduce((a, b) => scores[b] > scores[a] ? b : a);
-  const r = BREEDS[winner];
-  let dataUrl;
-  try {
-    dataUrl = drawShareCanvas(r).toDataURL("image/png");
-  } catch (e) {
-    showToast("이미지 생성에 실패했습니다.");
-    return;
-  }
-
-  if (isTouchDevice()) {
-    showImagePreviewModal(dataUrl);
-    return;
-  }
-  try {
-    const blob = dataURLtoBlob(dataUrl);
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "내-성격에-맞는-강아지-" + r.name + ".png";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    showToast("이미지가 저장되었습니다 📥");
-    setTimeout(() => URL.revokeObjectURL(url), 30000);
-  } catch (e) {
-    showToast("이미지 저장에 실패했습니다.");
-  }
-}
-
-// navigator.share는 클릭당 한 번만 안전하게 호출 (두 번째 호출은 사용자 제스처가
-// 만료돼서 실패하거나 예상 못한 동작(사파리로 그냥 이동 등)을 일으킬 수 있음)
-function handleShare() {
-  const winner = Object.keys(scores).reduce((a, b) => scores[b] > scores[a] ? b : a);
-  const r = BREEDS[winner];
-  const shareText = getShareText();
-  const shareUrl = getShareUrl();
-
-  if (!navigator.share) {
-    copyShareLink("공유하려는 앱");
-    return;
-  }
-
-  let fileShareData = null;
-  try {
-    const dataUrl = drawShareCanvas(r).toDataURL("image/png");
-    const blob = dataURLtoBlob(dataUrl);
-    const file = new File([blob], "내-성격에-맞는-강아지.png", { type: "image/png" });
-    fileShareData = { files: [file] };
-    if (!(navigator.canShare && navigator.canShare(fileShareData))) fileShareData = null;
-  } catch (e) {
-    fileShareData = null;
-  }
-
-  const shareData = fileShareData || { title: "나에게 맞는 강아지 테스트", text: shareText, url: shareUrl };
-  navigator.share(shareData).catch(err => {
-    if (err && err.name !== "AbortError") copyShareLink("공유하려는 앱");
-  });
-}
-
-// 내 결과 이미지가 아니라 "테스트 자체"를 친구에게 초대하는 순수 링크 공유
-function shareTestLink() {
-  const text = "나에게 맞는 강아지가 뭘까? 🐶 1분 성격 테스트 해보기";
-  const url = getShareUrl();
-  if (!navigator.share) {
-    copyShareLink("공유하려는 앱");
-    return;
-  }
-  navigator.share({ title: "강아지 성격 테스트", text, url }).catch(err => {
-    if (err && err.name !== "AbortError") copyShareLink("공유하려는 앱");
-  });
-}
 </script>
 </body>
 </html>
