@@ -179,11 +179,9 @@
     <!-- 쿠팡 파트너스 제휴 링크 자리: 결과별 추천 상품 -->
     <div class="shop-box">
       <h3>🛒 <span id="r-breed-shop"></span> 맞춤 준비물</h3>
-      <a id="r-shop-link" href="#" target="_blank" rel="noopener sponsored">쿠팡에서 추천 용품 보기 →</a><br>
-      <a id="r-naver-link" href="#" target="_blank" rel="noopener sponsored" style="font-size:13px;">네이버 쇼핑보기 - 7만5천개의 리뷰 강아지 관절 영양제</a>
+      <a id="r-shop-link" href="#" target="_blank" rel="noopener sponsored">쿠팡에서 추천 용품 보기 →</a>
       <p style="font-size:11px; color:var(--ink-soft); margin:8px 0 0;">
-이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.<br>
-이 포스팅은 네이버 쇼핑 커넥트 활동의 일환으로, 판매 발생 시 수수료를 제공받습니다.
+이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
       </p>
     </div>
 
@@ -191,6 +189,7 @@
       <button class="btn" onclick="openShareModal()">결과 공유하기</button>
       <button class="btn ghost" onclick="location.reload()">다시 하기</button>
     </div>
+    <a class="btn ghost" href="../" style="text-align:center; text-decoration:none;">🍞 다른 테스트 하러 가기</a>
 
     <!-- 공유 모달 -->
     <div id="shareModal" class="modal hidden">
@@ -398,7 +397,6 @@ function showResult() {
   document.getElementById("r-tip").textContent = r.tip;
   document.getElementById("r-breed-shop").textContent = r.name;
   document.getElementById("r-shop-link").href = r.shopLink;
-  document.getElementById("r-naver-link").href = "https://naver.me/x0OFs2EB";
   document.getElementById("r-emoji-char").textContent = r.emoji;
   // 사진이 있으면 사진 표시, 없으면 이모지 폴백 (로딩 중엔 "불러오는 중" 안내 표시)
   const img = document.getElementById("r-photo");

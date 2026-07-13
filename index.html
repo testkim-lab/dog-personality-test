@@ -102,28 +102,35 @@
     },
     {
       emoji: "👗",
-      tag: "스타일 진단 · 1분",
+      tag: "커밍 순 · 곧 공개",
       title: "내 패션 스타일 진단 테스트",
       desc: "8가지 질문으로 찾는 나에게 딱 맞는 스타일",
-      url: "fashion-test/"
+      url: "fashion-test/",
+      comingSoon: true
     }
   ];
 
   const list = document.getElementById("test-list");
   TESTS.forEach(t => {
-    const a = document.createElement("a");
-    a.className = "test-card";
-    a.href = t.url;
-    a.innerHTML = `
+    // 커밍 순 카드는 링크 없이 흐리게 표시 (오픈 준비 중인 테스트 예고용)
+    const el = document.createElement(t.comingSoon ? "div" : "a");
+    el.className = "test-card";
+    if (t.comingSoon) {
+      el.style.opacity = ".55";
+      el.style.cursor = "default";
+    } else {
+      el.href = t.url;
+    }
+    el.innerHTML = `
       <div class="test-emoji">${t.emoji}</div>
       <div class="test-info">
         <p class="test-tag">${t.tag}</p>
         <p class="test-title">${t.title}</p>
         <p class="test-desc">${t.desc}</p>
       </div>
-      <div class="test-arrow">→</div>
+      <div class="test-arrow">${t.comingSoon ? "🥐" : "→"}</div>
     `;
-    list.appendChild(a);
+    list.appendChild(el);
   });
 </script>
 </body>
