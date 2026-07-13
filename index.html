@@ -196,7 +196,8 @@
         <button class="modal-close" onclick="closeShareModal()">✕</button>
         <h3>결과 공유하기</h3>
         <div class="share-buttons">
-          <button class="share-btn native-share" id="btn-native-share" onclick="handleShare()">📤 공유하기</button>
+          <button class="share-btn native-share" id="btn-native-share" onclick="handleShare()">🖼️ 이미지로 공유</button>
+          <button class="share-btn test-share" id="btn-test-share" onclick="shareTestLink()">🔗 테스트 공유하기</button>
           <button class="share-btn kakao" onclick="shareKakao()">💬 카카오톡</button>
           <button class="share-btn threads" onclick="shareThreads()">🧵 스레드</button>
           <button class="share-btn capture" id="btn-save-image" onclick="handleSaveImage()">📥 이미지 저장</button>
@@ -411,7 +412,9 @@ function showResult() {
 
 function openShareModal() {
   const nativeBtn = document.getElementById("btn-native-share");
+  const testBtn = document.getElementById("btn-test-share");
   if (nativeBtn) nativeBtn.style.display = navigator.share ? "" : "none";
+  if (testBtn) testBtn.style.display = navigator.share ? "" : "none";
   document.getElementById("shareModal").classList.remove("hidden");
 }
 
@@ -491,7 +494,7 @@ function dataURLtoBlob(dataUrl) {
 }
 
 // ── 결과 카드를 Canvas에 직접 그려서 공유용 이미지 생성 (외부 라이브러리 불필요) ──
-function wrapCanvasText(ctx, text, cx, y, maxWidth, lineHeight) {
+function wrapLines(ctx, text, maxWidth) {
   const words = text.split(" ");
   let line = "";
   const lines = [];
@@ -505,15 +508,47 @@ function wrapCanvasText(ctx, text, cx, y, maxWidth, lineHeight) {
     }
   });
   if (line) lines.push(line);
-  lines.forEach((l, i) => ctx.fillText(l, cx, y + i * lineHeight));
+  return lines;
+}
+
+function drawLines(ctx, lines, x, y, lineHeight) {
+  lines.forEach((l, i) => ctx.fillText(l, x, y + i * lineHeight));
   return y + lines.length * lineHeight;
+}
+
+function drawRoundedRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
 }
 
 function drawShareCanvas(r) {
   const canvas = document.getElementById("share-canvas");
   const ctx = canvas.getContext("2d");
-  const W = canvas.width, H = canvas.height;
+  const W = 1080;
   const cx = W / 2;
+  const boxX = 70, boxW = W - 140, boxPad = 32;
+  const descStartY = 700, descLineHeight = 42;
+  const whyLineHeight = 38;
+
+  // ── 1단계: 실제 그리기 전에 필요한 세로 길이부터 계산 (텍스트 길이에 따라 캔버스 높이가 달라짐) ──
+  canvas.width = W; canvas.height = 100;
+  ctx.font = "28px 'Malgun Gothic', sans-serif";
+  const descLines = wrapLines(ctx, r.desc, boxW - 40);
+  ctx.font = "26px 'Malgun Gothic', sans-serif";
+  const whyLines = wrapLines(ctx, r.why, boxW - boxPad * 2);
+
+  const descEndY = descStartY + descLines.length * descLineHeight;
+  const boxY = descEndY + 40;
+  const boxH = 56 + whyLines.length * whyLineHeight + boxPad;
+  const H = boxY + boxH + 40 + 140; // 박스 하단 여백 + 하단 브랜드 바
+
+  // ── 2단계: 확정된 크기로 캔버스를 맞추고 실제로 그리기 ──
+  canvas.width = W; canvas.height = H;
 
   const bg = ctx.createLinearGradient(0, 0, 0, H);
   bg.addColorStop(0, "#faf7f2");
@@ -528,25 +563,38 @@ function drawShareCanvas(r) {
 
   // 이모지 원형 배지
   ctx.beginPath();
-  ctx.arc(cx, 340, 170, 0, Math.PI * 2);
+  ctx.arc(cx, 320, 160, 0, Math.PI * 2);
   ctx.fillStyle = "#f3d9c3";
   ctx.fill();
-  ctx.font = "180px sans-serif";
+  ctx.font = "170px sans-serif";
   ctx.textBaseline = "middle";
-  ctx.fillText(r.emoji, cx, 350);
+  ctx.fillText(r.emoji, cx, 330);
   ctx.textBaseline = "alphabetic";
 
   ctx.fillStyle = "#a5552a";
   ctx.font = "bold 34px 'Malgun Gothic', sans-serif";
-  ctx.fillText("당신은 「" + r.type + "」", cx, 590);
+  ctx.fillText("당신은 「" + r.type + "」", cx, 550);
 
   ctx.fillStyle = "#3a2e25";
-  ctx.font = "bold 64px 'Malgun Gothic', sans-serif";
-  ctx.fillText(r.name, cx, 670);
+  ctx.font = "bold 62px 'Malgun Gothic', sans-serif";
+  ctx.fillText(r.name, cx, 628);
 
   ctx.fillStyle = "#3a2e25";
   ctx.font = "28px 'Malgun Gothic', sans-serif";
-  wrapCanvasText(ctx, r.desc, cx, 750, W - 140, 42);
+  drawLines(ctx, descLines, cx, descStartY, descLineHeight);
+
+  // "이 강아지와 잘 맞는 이유" 박스
+  ctx.fillStyle = "#ffffff";
+  drawRoundedRect(ctx, boxX, boxY, boxW, boxH, 18);
+  ctx.fill();
+  ctx.textAlign = "left";
+  ctx.fillStyle = "#a5552a";
+  ctx.font = "bold 26px 'Malgun Gothic', sans-serif";
+  ctx.fillText("💡 이 강아지와 잘 맞는 이유", boxX + boxPad, boxY + 48);
+  ctx.fillStyle = "#3a2e25";
+  ctx.font = "26px 'Malgun Gothic', sans-serif";
+  drawLines(ctx, whyLines, boxX + boxPad, boxY + 92, whyLineHeight);
+  ctx.textAlign = "center";
 
   // 하단 브랜드 바
   ctx.fillStyle = "#c96f3b";
@@ -638,6 +686,19 @@ function handleShare() {
 
   const shareData = fileShareData || { title: "나에게 맞는 강아지 테스트", text: shareText, url: shareUrl };
   navigator.share(shareData).catch(err => {
+    if (err && err.name !== "AbortError") copyShareLink("공유하려는 앱");
+  });
+}
+
+// 내 결과 이미지가 아니라 "테스트 자체"를 친구에게 초대하는 순수 링크 공유
+function shareTestLink() {
+  const text = "나에게 맞는 강아지가 뭘까? 🐶 1분 성격 테스트 해보기";
+  const url = getShareUrl();
+  if (!navigator.share) {
+    copyShareLink("공유하려는 앱");
+    return;
+  }
+  navigator.share({ title: "강아지 성격 테스트", text, url }).catch(err => {
     if (err && err.name !== "AbortError") copyShareLink("공유하려는 앱");
   });
 }
