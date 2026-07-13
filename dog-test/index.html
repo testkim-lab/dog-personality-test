@@ -71,8 +71,11 @@
   .photo-fallback {
     width: 100%; aspect-ratio: 4/3; border-radius: 12px;
     background: linear-gradient(135deg, var(--accent-soft), #f3d9c3);
-    display: flex; align-items: center; justify-content: center;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
     font-size: 72px; margin-bottom: 16px;
+  }
+  .photo-loading-text {
+    font-size: 13px; font-weight: 700; color: var(--accent-deep);
   }
   .result-type { font-size: 14px; color: var(--accent); font-weight: 700; margin: 0; }
   .result-name { font-size: 26px; font-weight: 800; margin: 4px 0 12px; }
@@ -168,7 +171,10 @@
     <p class="result-type" id="r-type"></p>
     <p class="result-name" id="r-name"></p>
     <img class="result-photo hidden" id="r-photo" alt="">
-    <div class="photo-fallback" id="r-emoji"></div>
+    <div class="photo-fallback" id="r-emoji">
+      <span id="r-emoji-char"></span>
+      <span class="photo-loading-text hidden" id="r-photo-loading">📷 사진 불러오는 중...</span>
+    </div>
     <p class="result-desc" id="r-desc"></p>
     <div class="trait-box"><h3>💡 이 강아지와 잘 맞는 이유</h3><p id="r-why"></p></div>
     <div class="trait-box"><h3>🏠 키울 때 알아두세요</h3><p id="r-tip"></p></div>
@@ -398,18 +404,22 @@ function showResult() {
   document.getElementById("r-shop-desc").textContent = r.shopDesc;
   document.getElementById("r-shop-link").href = r.shopLink;
   document.getElementById("r-naver-link").href = "https://naver.me/x0OFs2EB";
-  document.getElementById("r-emoji").textContent = r.emoji;
-  // 사진이 있으면 사진 표시, 없으면 이모지 폴백
+  document.getElementById("r-emoji-char").textContent = r.emoji;
+  // 사진이 있으면 사진 표시, 없으면 이모지 폴백 (로딩 중엔 "불러오는 중" 안내 표시)
   const img = document.getElementById("r-photo");
+  const loadingText = document.getElementById("r-photo-loading");
   const showPhoto = () => {
     img.classList.remove("hidden");
     document.getElementById("r-emoji").classList.add("hidden");
+    loadingText.classList.add("hidden");
   };
+  const alreadyCached = img.src === new URL(r.photo, location.href).href && img.complete && img.naturalWidth > 0;
+  loadingText.classList.toggle("hidden", alreadyCached);
   img.onload = showPhoto;
-  img.onerror = () => {}; // 사진 실패 시 이모지 유지
+  img.onerror = () => loadingText.classList.add("hidden"); // 사진 실패 시 로딩 문구만 지우고 이모지 유지
   img.src = r.photo;
   img.alt = r.name + " 사진";
-  if (img.complete && img.naturalWidth > 0) showPhoto(); // 캐시된 사진은 즉시 표시
+  if (alreadyCached) showPhoto(); // 캐시된 사진은 즉시 표시
   window.scrollTo({ top: 0 });
 }
 
@@ -646,11 +656,13 @@ function handleSaveImage() {
 
 // navigator.share는 클릭당 한 번만 안전하게 호출 (두 번째 호출은 사용자 제스처가
 // 만료돼서 실패하거나 예상 못한 동작(사파리로 그냥 이동 등)을 일으킬 수 있음)
+// 앱마다 navigator.share의 files/text/url 조합 처리 방식이 달라서(일부 앱은
+// url 필드를 무시함), 링크는 항상 text 안에 직접 포함시켜서 어떤 앱으로 공유해도
+// 사이트 주소가 같이 딸려가도록 함
 function handleShare() {
   const winner = Object.keys(scores).reduce((a, b) => scores[b] > scores[a] ? b : a);
   const r = BREEDS[winner];
-  const shareText = getShareText();
-  const shareUrl = getShareUrl();
+  const fullText = getShareText() + "\n" + getShareUrl();
 
   if (!navigator.share) {
     copyShareLink("공유하려는 앱");
@@ -662,13 +674,13 @@ function handleShare() {
     const dataUrl = drawShareCanvas(r).toDataURL("image/png");
     const blob = dataURLtoBlob(dataUrl);
     const file = new File([blob], "내-성격에-맞는-강아지.png", { type: "image/png" });
-    fileShareData = { files: [file] };
+    fileShareData = { files: [file], title: "나에게 맞는 강아지 테스트", text: fullText };
     if (!(navigator.canShare && navigator.canShare(fileShareData))) fileShareData = null;
   } catch (e) {
     fileShareData = null;
   }
 
-  const shareData = fileShareData || { title: "나에게 맞는 강아지 테스트", text: shareText, url: shareUrl };
+  const shareData = fileShareData || { title: "나에게 맞는 강아지 테스트", text: fullText };
   navigator.share(shareData).catch(err => {
     if (err && err.name !== "AbortError") copyShareLink("공유하려는 앱");
   });
@@ -676,13 +688,12 @@ function handleShare() {
 
 // 내 결과 이미지가 아니라 "테스트 자체"를 친구에게 초대하는 순수 링크 공유
 function shareTestLink() {
-  const text = "나에게 맞는 강아지가 뭘까? 🐶 1분 성격 테스트 해보기";
-  const url = getShareUrl();
+  const fullText = "나에게 맞는 강아지가 뭘까? 🐶 1분 성격 테스트 해보기\n" + getShareUrl();
   if (!navigator.share) {
     copyShareLink("공유하려는 앱");
     return;
   }
-  navigator.share({ title: "강아지 성격 테스트", text, url }).catch(err => {
+  navigator.share({ title: "강아지 성격 테스트", text: fullText }).catch(err => {
     if (err && err.name !== "AbortError") copyShareLink("공유하려는 앱");
   });
 }
