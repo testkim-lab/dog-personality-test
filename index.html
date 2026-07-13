@@ -122,6 +122,14 @@
   }
   .share-btn:hover { border-color: var(--accent); background: var(--accent-soft); }
   .hidden { display: none; }
+  .toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+    background: var(--ink); color: #fff; font-size: 14px; font-weight: 600;
+    padding: 12px 20px; border-radius: 999px; box-shadow: 0 4px 16px rgba(0,0,0,.25);
+    z-index: 2000; opacity: 0; pointer-events: none; transition: opacity .2s;
+    max-width: 88%; text-align: center;
+  }
+  .toast.show { opacity: 1; }
   footer { text-align: center; font-size: 12px; color: var(--ink-soft); margin-top: 40px; }
   @media (prefers-reduced-motion: reduce) { .progress-fill { transition: none; } }
 </style>
@@ -188,11 +196,10 @@
         <button class="modal-close" onclick="closeShareModal()">✕</button>
         <h3>결과 공유하기</h3>
         <div class="share-buttons">
-          <button class="share-btn instagram" onclick="shareInstagram()">📸 인스타그램</button>
-          <button class="share-btn threads" onclick="shareThreads()">🧵 스레드</button>
-          <button class="share-btn tiktok" onclick="shareTikTok()">🎵 틱톡</button>
+          <button class="share-btn native-share" id="btn-native-share" onclick="handleShare()">📤 공유하기</button>
           <button class="share-btn kakao" onclick="shareKakao()">💬 카카오톡</button>
-          <button class="share-btn capture" onclick="captureImage()">📥 이미지 저장</button>
+          <button class="share-btn threads" onclick="shareThreads()">🧵 스레드</button>
+          <button class="share-btn capture" id="btn-save-image" onclick="handleSaveImage()">📥 이미지 저장</button>
         </div>
       </div>
     </div>
@@ -206,6 +213,10 @@
     <p>품종 사진: <a href="https://commons.wikimedia.org/" target="_blank" rel="noopener" style="color:inherit;">Wikimedia Commons</a> (자유 라이선스, 개별 출처는 images/CREDITS.txt)</p>
   </footer>
 </div>
+
+<div id="modal-root"></div>
+<div id="toast" class="toast"></div>
+<canvas id="share-canvas" width="1080" height="1350" class="hidden"></canvas>
 
 <script>
 // ── 8가지 성격 유형 × 품종 매핑 ──────────────────────────
@@ -399,6 +410,8 @@ function showResult() {
 }
 
 function openShareModal() {
+  const nativeBtn = document.getElementById("btn-native-share");
+  if (nativeBtn) nativeBtn.style.display = navigator.share ? "" : "none";
   document.getElementById("shareModal").classList.remove("hidden");
 }
 
@@ -416,24 +429,11 @@ function getShareText() {
   return `내 성격에 맞는 강아지는 「${breedName}」! 너는 어떤 강아지일까? 🐶`;
 }
 
-// 모바일: 네이티브 공유 시트가 열려서 원하는 앱(인스타·틱톡·카톡 등)으로 바로 공유됨
-function nativeShare() {
-  if (navigator.share) {
-    navigator.share({
-      title: "나에게 맞는 강아지 테스트",
-      text: getShareText(),
-      url: getShareUrl()
-    }).catch(() => {});
-    return true;
-  }
-  return false;
-}
-
 function copyShareLink(appName) {
   const full = getShareText() + "\n" + getShareUrl();
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(full).then(() => {
-      alert(appName + "에 붙여넣기만 하면 돼요!\n(링크가 복사되었습니다 📋)");
+      showToast(appName + "에 붙여넣기만 하면 돼요! (링크 복사됨 📋)");
     }).catch(() => {
       prompt("아래 내용을 복사해서 " + appName + "에 붙여넣으세요:", full);
     });
@@ -442,19 +442,10 @@ function copyShareLink(appName) {
   }
 }
 
-function shareInstagram() {
-  // 인스타그램은 웹 공유 URL이 없음 → 모바일이면 공유 시트, 아니면 링크 복사
-  if (!nativeShare()) copyShareLink("인스타그램");
-}
-
 function shareThreads() {
   // 스레드는 공식 공유 URL 지원 → 앱/웹 작성 화면이 바로 열림
   const text = encodeURIComponent(getShareText() + "\n" + getShareUrl());
   window.open("https://www.threads.net/intent/post?text=" + text, "_blank");
-}
-
-function shareTikTok() {
-  if (!nativeShare()) copyShareLink("틱톡");
 }
 
 function shareKakao() {
@@ -469,31 +460,186 @@ function shareKakao() {
         link: { webUrl: getShareUrl(), mobileWebUrl: getShareUrl() }
       }
     });
-  } else if (!nativeShare()) {
+  } else if (navigator.share) {
+    handleShare();
+  } else {
     copyShareLink("카카오톡");
   }
 }
 
-function doCapture() {
-  const element = document.querySelector('.wrap');
-  html2canvas(element, { scale: 2, useCORS: true, allowTaint: true }).then(canvas => {
-    const link = document.createElement('a');
-    link.href = canvas.toDataURL('image/png');
-    link.download = '내-성격에-맞는-강아지.png';
-    link.click();
-    closeShareModal();
-  }).catch(() => {
-    alert("이미지 저장에 실패했습니다. 화면을 직접 캡처해주세요.");
-  });
+function showToast(msg) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => el.classList.remove("show"), 2600);
 }
 
-function captureImage() {
-  if (window.html2canvas) { doCapture(); return; }
-  const script = document.createElement('script');
-  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-  script.onload = doCapture;
-  script.onerror = () => alert("이미지 저장 기능을 불러오지 못했습니다. 인터넷 연결을 확인해주세요.");
-  document.head.appendChild(script);
+function isIOSDevice() {
+  return /iP(hone|ad|od)/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+}
+
+function dataURLtoBlob(dataUrl) {
+  const parts = dataUrl.split(",");
+  const mime = (parts[0].match(/:(.*?);/) || [,"image/png"])[1];
+  const binary = atob(parts[1]);
+  const u8arr = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) u8arr[i] = binary.charCodeAt(i);
+  return new Blob([u8arr], { type: mime });
+}
+
+// ── 결과 카드를 Canvas에 직접 그려서 공유용 이미지 생성 (외부 라이브러리 불필요) ──
+function wrapCanvasText(ctx, text, cx, y, maxWidth, lineHeight) {
+  const words = text.split(" ");
+  let line = "";
+  const lines = [];
+  words.forEach(word => {
+    const test = line ? line + " " + word : word;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = test;
+    }
+  });
+  if (line) lines.push(line);
+  lines.forEach((l, i) => ctx.fillText(l, cx, y + i * lineHeight));
+  return y + lines.length * lineHeight;
+}
+
+function drawShareCanvas(r) {
+  const canvas = document.getElementById("share-canvas");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2;
+
+  const bg = ctx.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, "#faf7f2");
+  bg.addColorStop(1, "#f7e8dc");
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#c96f3b";
+  ctx.font = "bold 30px 'Malgun Gothic', sans-serif";
+  ctx.fillText("무료 성격 테스트 · 강아지 종류 테스트 🐶", cx, 110);
+
+  // 이모지 원형 배지
+  ctx.beginPath();
+  ctx.arc(cx, 340, 170, 0, Math.PI * 2);
+  ctx.fillStyle = "#f3d9c3";
+  ctx.fill();
+  ctx.font = "180px sans-serif";
+  ctx.textBaseline = "middle";
+  ctx.fillText(r.emoji, cx, 350);
+  ctx.textBaseline = "alphabetic";
+
+  ctx.fillStyle = "#a5552a";
+  ctx.font = "bold 34px 'Malgun Gothic', sans-serif";
+  ctx.fillText("당신은 「" + r.type + "」", cx, 590);
+
+  ctx.fillStyle = "#3a2e25";
+  ctx.font = "bold 64px 'Malgun Gothic', sans-serif";
+  ctx.fillText(r.name, cx, 670);
+
+  ctx.fillStyle = "#3a2e25";
+  ctx.font = "28px 'Malgun Gothic', sans-serif";
+  wrapCanvasText(ctx, r.desc, cx, 750, W - 140, 42);
+
+  // 하단 브랜드 바
+  ctx.fillStyle = "#c96f3b";
+  ctx.fillRect(0, H - 140, W, 140);
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 34px 'Malgun Gothic', sans-serif";
+  ctx.fillText("나도 내 성격에 맞는 강아지 찾아보기 →", cx, H - 78);
+  ctx.font = "24px 'Malgun Gothic', sans-serif";
+  ctx.fillText(getShareUrl().replace(/^https?:\/\//, ""), cx, H - 38);
+
+  return canvas;
+}
+
+function showImagePreviewModal(dataUrl) {
+  const root = document.getElementById("modal-root");
+  root.innerHTML =
+    '<div class="modal" id="image-modal-backdrop">' +
+      '<div class="modal-content" style="text-align:center;">' +
+        '<button class="modal-close" id="image-modal-close">✕</button>' +
+        '<h3>이미지를 길게 눌러 저장하세요</h3>' +
+        '<img src="' + dataUrl + '" alt="테스트 결과 이미지" style="width:100%;border-radius:12px;border:1px solid var(--line);margin:12px 0 4px;">' +
+      '</div>' +
+    '</div>';
+  const closeModal = () => { root.innerHTML = ""; };
+  document.getElementById("image-modal-backdrop").addEventListener("click", e => { if (e.target.id === "image-modal-backdrop") closeModal(); });
+  document.getElementById("image-modal-close").addEventListener("click", closeModal);
+}
+
+function handleSaveImage() {
+  const winner = Object.keys(scores).reduce((a, b) => scores[b] > scores[a] ? b : a);
+  const r = BREEDS[winner];
+  const btn = document.getElementById("btn-save-image");
+  let dataUrl;
+  try {
+    dataUrl = drawShareCanvas(r).toDataURL("image/png");
+  } catch (e) {
+    showToast("이미지 생성에 실패했습니다.");
+    return;
+  }
+
+  if (isIOSDevice()) {
+    showImagePreviewModal(dataUrl);
+    return;
+  }
+  try {
+    const blob = dataURLtoBlob(dataUrl);
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "내-성격에-맞는-강아지-" + r.name + ".png";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast("이미지가 저장되었습니다 📥");
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+  } catch (e) {
+    showToast("이미지 저장에 실패했습니다.");
+  }
+}
+
+// 이미지 파일을 그대로 OS 공유 시트로 넘겨서 설치된 어떤 앱으로든 자유롭게 공유
+function handleShare() {
+  const winner = Object.keys(scores).reduce((a, b) => scores[b] > scores[a] ? b : a);
+  const r = BREEDS[winner];
+  const shareText = getShareText();
+  const shareUrl = getShareUrl();
+
+  if (!navigator.share) {
+    copyShareLink("공유하려는 앱");
+    return;
+  }
+
+  try {
+    const dataUrl = drawShareCanvas(r).toDataURL("image/png");
+    const blob = dataURLtoBlob(dataUrl);
+    const file = new File([blob], "내-성격에-맞는-강아지.png", { type: "image/png" });
+    const fileShareData = { files: [file] };
+
+    if (navigator.canShare && navigator.canShare(fileShareData)) {
+      navigator.share(fileShareData).catch(err => {
+        if (err && err.name !== "AbortError") fallbackTextShare(shareText, shareUrl);
+      });
+    } else {
+      fallbackTextShare(shareText, shareUrl);
+    }
+  } catch (e) {
+    fallbackTextShare(shareText, shareUrl);
+  }
+}
+
+function fallbackTextShare(text, url) {
+  navigator.share({ title: "나에게 맞는 강아지 테스트", text: text + "\n" + url }).catch(err => {
+    if (err && err.name !== "AbortError") copyShareLink("공유하려는 앱");
+  });
 }
 </script>
 </body>
