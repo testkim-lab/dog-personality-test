@@ -197,9 +197,6 @@
         <h3>결과 공유하기</h3>
         <div class="share-buttons">
           <button class="share-btn native-share" id="btn-native-share" onclick="handleShare()">🖼️ 이미지로 공유</button>
-          <button class="share-btn test-share" id="btn-test-share" onclick="shareTestLink()">🔗 테스트 공유하기</button>
-          <button class="share-btn kakao" onclick="shareKakao()">💬 카카오톡</button>
-          <button class="share-btn threads" onclick="shareThreads()">🧵 스레드</button>
           <button class="share-btn capture" id="btn-save-image" onclick="handleSaveImage()">📥 이미지 저장</button>
         </div>
       </div>
@@ -412,9 +409,7 @@ function showResult() {
 
 function openShareModal() {
   const nativeBtn = document.getElementById("btn-native-share");
-  const testBtn = document.getElementById("btn-test-share");
   if (nativeBtn) nativeBtn.style.display = navigator.share ? "" : "none";
-  if (testBtn) testBtn.style.display = navigator.share ? "" : "none";
   document.getElementById("shareModal").classList.remove("hidden");
 }
 
@@ -442,37 +437,6 @@ function copyShareLink(appName) {
     });
   } else {
     prompt("아래 내용을 복사해서 " + appName + "에 붙여넣으세요:", full);
-  }
-}
-
-function shareThreads() {
-  // 스레드는 공식 공유 URL 지원. window.open보다 실제 <a> 클릭이 앱 전환(유니버설 링크)이 더 잘 됨
-  const text = encodeURIComponent(getShareText() + "\n" + getShareUrl());
-  const a = document.createElement("a");
-  a.href = "https://www.threads.net/intent/post?text=" + text;
-  a.target = "_blank";
-  a.rel = "noopener";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-}
-
-function shareKakao() {
-  if (window.Kakao && Kakao.isInitialized && Kakao.isInitialized()) {
-    const breedName = document.getElementById("r-breed-shop")?.textContent || "강아지";
-    Kakao.Share.sendDefault({
-      objectType: 'feed',
-      content: {
-        title: `내 성격에 맞는 강아지: ${breedName}`,
-        description: '너는 어떤 강아지일까? 성격 테스트 해보기!',
-        imageUrl: getShareUrl() + 'images/og-thumbnail.jpg',
-        link: { webUrl: getShareUrl(), mobileWebUrl: getShareUrl() }
-      }
-    });
-  } else if (navigator.share) {
-    handleShare();
-  } else {
-    copyShareLink("카카오톡");
   }
 }
 
@@ -690,18 +654,6 @@ function handleShare() {
   });
 }
 
-// 내 결과 이미지가 아니라 "테스트 자체"를 친구에게 초대하는 순수 링크 공유
-function shareTestLink() {
-  const text = "나에게 맞는 강아지가 뭘까? 🐶 1분 성격 테스트 해보기";
-  const url = getShareUrl();
-  if (!navigator.share) {
-    copyShareLink("공유하려는 앱");
-    return;
-  }
-  navigator.share({ title: "강아지 성격 테스트", text, url }).catch(err => {
-    if (err && err.name !== "AbortError") copyShareLink("공유하려는 앱");
-  });
-}
 </script>
 </body>
 </html>
