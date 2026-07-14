@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎨 디자인 브릿지</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+    background: #f5f7fb; color: #222; font-size: 18px;
+    max-width: 860px; margin: 0 auto; padding: 24px 16px 60px;
+  }
+  h1 { font-size: 1.7em; margin-bottom: 6px; }
+  .sub { color: #555; margin-bottom: 24px; }
+  .card { background: #fff; border-radius: 18px; padding: 22px; margin-bottom: 22px;
+          box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+  .badge { display:inline-block; background:#2b6cb0; color:#fff; border-radius:999px;
+           padding: 3px 16px; font-weight:800; font-size:.85em; margin-right: 8px; }
+  .step-title { font-size: 1.2em; font-weight: 800; margin-bottom: 6px; }
+  .caption { color:#666; font-size:.92em; margin-bottom: 14px; line-height: 1.6; }
+
+  /* 드롭존 */
+  #dropzone {
+    border: 3px dashed #9db8dd; border-radius: 16px; background: #f0f6ff;
+    padding: 44px 16px; text-align: center; cursor: pointer;
+    font-size: 1.15em; font-weight: 700; color: #2b6cb0;
+    transition: background .15s, border-color .15s;
+  }
+  #dropzone.drag { background: #dcebff; border-color: #2b6cb0; }
+  #dropzone small { display:block; margin-top:8px; font-weight:400; color:#6a83a8; font-size:.8em; }
+
+  /* 갤러리 */
+  #gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+             gap: 16px; margin-top: 18px; }
+  .item { background:#fafbfe; border:1px solid #e3e8f2; border-radius:14px; padding:10px; }
+  .item img { width:100%; height:150px; object-fit:contain; background:
+              repeating-conic-gradient(#eee 0 25%, #fff 0 50%) 0 0/16px 16px;
+              border-radius:10px; display:block; }
+  .item .name { font-size:.78em; color:#777; margin:8px 0 8px; word-break:break-all;
+                white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .btn {
+    display:block; width:100%; border:0; border-radius:12px; padding:13px 8px;
+    font-size:1em; font-weight:800; cursor:pointer; font-family:inherit;
+    background:#2b6cb0; color:#fff; transition: transform .06s, opacity .15s;
+  }
+  .btn:hover { opacity:.88; } .btn:active { transform: scale(.97); }
+  .btn.copied { background:#22a05a; }
+  .btn-del { background:none; border:none; color:#c66; cursor:pointer; font-size:.8em;
+             margin-top:6px; width:100%; font-family:inherit; }
+
+  /* 툴 링크 */
+  .tools { display:flex; gap:14px; flex-wrap:wrap; }
+  .tool {
+    flex:1; min-width:150px; text-align:center; padding:20px 10px; border-radius:14px;
+    color:#fff; font-weight:800; font-size:1.08em; text-decoration:none;
+    transition: transform .06s, opacity .15s;
+  }
+  .tool:hover { opacity:.87; } .tool:active { transform: scale(.97); }
+  .canva { background:#2f6fdb; } .miri { background:#1fa46a; } .mango { background:#d99a1f; }
+
+  /* 메모 */
+  #memo { width:100%; min-height:150px; border:1px solid #cfd8e8; border-radius:12px;
+          padding:14px; font-size:1em; font-family:inherit; resize:vertical; line-height:1.7; }
+  #memoStatus { font-size:.85em; color:#22a05a; margin-top:6px; min-height:1.2em; }
+
+  /* 상태 메시지 */
+  #status {
+    position: fixed; left:50%; bottom:28px; transform: translateX(-50%);
+    background:#222; color:#fff; padding:14px 26px; border-radius:999px;
+    font-weight:700; font-size:1em; opacity:0; pointer-events:none;
+    transition: opacity .25s; z-index:99; max-width:90%; text-align:center;
+  }
+  #status.show { opacity:1; }
+  #status.ok { background:#1d8a4e; } #status.err { background:#c0392b; }
+
+  .empty { text-align:center; color:#8a97ad; padding: 26px 10px 8px; font-size:.95em; line-height:1.8; }
+</style>
+</head>
+<body>
+
+<h1>🎨 디자인 브릿지</h1>
+<p class="sub"><b>이미지 넣기 → [복사] → 디자인 툴에서 Ctrl+V.</b> 그게 전부예요.</p>
+
+<!-- 1단계 -->
+<div class="card">
+  <div class="step-title"><span class="badge">1단계</span>이미지 넣기</div>
+  <div class="caption">인터넷에서 받은 이미지, AI 이미지, 사진 뭐든 OK. 여러 장도 한 번에.<br>
+  💡 다른 곳에서 이미지를 복사(Ctrl+C)한 상태라면, 이 화면에서 <b>Ctrl+V</b>를 눌러도 들어와요.</div>
+
+  <div id="dropzone">
+    📥 여기를 클릭하거나, 이미지를 끌어다 놓으세요
+    <small>PNG · JPG · WEBP · GIF · BMP</small>
+  </div>
+  <input type="file" id="fileInput" accept="image/*" multiple style="display:none">
+
+  <div id="gallery"></div>
+  <div id="emptyMsg" class="empty">아직 이미지가 없어요.<br>위 파란 상자에 이미지를 끌어다 놓으면 시작됩니다.</div>
+</div>
+
+<!-- 2단계 -->
+<div class="card">
+  <div class="step-title"><span class="badge">2단계</span>디자인 툴 열고 Ctrl+V</div>
+  <div class="caption">툴의 편집 화면에서 키보드 <b>Ctrl</b>을 누른 채 <b>V</b>를 누르면, 방금 복사한 이미지가 들어갑니다.</div>
+  <div class="tools">
+    <a class="tool canva" href="https://www.canva.com/design" target="_blank">🔵 캔바 열기</a>
+    <a class="tool miri"  href="https://www.miricanvas.com/design" target="_blank">🟢 미리캔버스 열기</a>
+    <a class="tool mango" href="https://www.mangoboard.net/" target="_blank">🟡 망고보드 열기</a>
+  </div>
+</div>
+
+<!-- 3단계 -->
+<div class="card">
+  <div class="step-title"><span class="badge">3단계</span>넣을 문구 메모장</div>
+  <div class="caption">훅 문장, 카피를 적어두세요. 브라우저를 껐다 켜도 그대로 남습니다.</div>
+  <textarea id="memo" placeholder="예) 첫 줄 훅: 90%가 모르는 전기요금 폭탄의 원인…"></textarea>
+  <div id="memoStatus"></div>
+</div>
+
+<div id="status"></div>
+
+<script>
+'use strict';
+
+// ───────── 상태 알림 ─────────
+var statusTimer = null;
+function toast(msg, kind) {
+  var el = document.getElementById('status');
+  el.textContent = msg;
+  el.className = 'show ' + (kind || '');
+  clearTimeout(statusTimer);
+  statusTimer = setTimeout(function () { el.className = ''; }, 3000);
+}
+
+// ───────── 이미지 목록 ─────────
+var dropzone = document.getElementById('dropzone');
+var fileInput = document.getElementById('fileInput');
+var gallery = document.getElementById('gallery');
+var emptyMsg = document.getElementById('emptyMsg');
+var itemCount = 0;
+
+function updateEmpty() {
+  emptyMsg.style.display = itemCount === 0 ? 'block' : 'none';
+}
+
+// 파일 → PNG Blob (webp/gif도 PNG로 통일해 붙여넣기 호환 확보)
+function fileToPngBlob(file, done, fail) {
+  var img = new Image();
+  var url = URL.createObjectURL(file);
+  img.onload = function () {
+    try {
+      var canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      canvas.getContext('2d').drawImage(img, 0, 0);
+      URL.revokeObjectURL(url);
+      canvas.toBlob(function (blob) {
+        if (blob) { done(blob); } else { fail(new Error('변환 실패')); }
+      }, 'image/png');
+    } catch (e) { URL.revokeObjectURL(url); fail(e); }
+  };
+  img.onerror = function () { URL.revokeObjectURL(url); fail(new Error('이미지를 읽을 수 없어요')); };
+  img.src = url;
+}
+
+// 클립보드 복사 (브라우저 내장 기능)
+function copyBlob(blob, done, fail) {
+  if (!navigator.clipboard || !window.ClipboardItem) {
+    fail(new Error('unsupported')); return;
+  }
+  var item = new ClipboardItem({ 'image/png': blob });
+  navigator.clipboard.write([item]).then(done).catch(fail);
+}
+
+function addImage(file) {
+  if (!file || file.type.indexOf('image/') !== 0) { return; }
+
+  fileToPngBlob(file, function (pngBlob) {
+    itemCount++;
+    var div = document.createElement('div');
+    div.className = 'item';
+
+    var img = document.createElement('img');
+    img.src = URL.createObjectURL(pngBlob);
+    img.alt = file.name;
+
+    var name = document.createElement('div');
+    name.className = 'name';
+    name.textContent = file.name || '이미지';
+
+    var btn = document.createElement('button');
+    btn.className = 'btn';
+    btn.textContent = '📋 이 이미지 복사';
+    btn.onclick = function () {
+      copyBlob(pngBlob, function () {
+        btn.textContent = '✅ 복사 완료!';
+        btn.classList.add('copied');
+        toast('복사됐어요! 2단계 툴을 열고 Ctrl+V 하세요 🎉', 'ok');
+        setTimeout(function () {
+          btn.textContent = '📋 이 이미지 복사';
+          btn.classList.remove('copied');
+        }, 2500);
+      }, function () {
+        toast('자동 복사가 막혔어요. 이미지 위에서 마우스 오른쪽 클릭 → "이미지 복사"를 눌러주세요.', 'err');
+      });
+    };
+
+    var del = document.createElement('button');
+    del.className = 'btn-del';
+    del.textContent = '✕ 목록에서 빼기';
+    del.onclick = function () {
+      URL.revokeObjectURL(img.src);
+      div.remove();
+      itemCount--;
+      updateEmpty();
+    };
+
+    div.appendChild(img);
+    div.appendChild(name);
+    div.appendChild(btn);
+    div.appendChild(del);
+    gallery.insertBefore(div, gallery.firstChild);
+    updateEmpty();
+  }, function (err) {
+    toast('⚠️ "' + (file.name || '파일') + '" 처리 실패: ' + err.message, 'err');
+  });
+}
+
+function addFiles(fileList) {
+  for (var i = 0; i < fileList.length; i++) { addImage(fileList[i]); }
+}
+
+// 클릭 → 파일 선택
+dropzone.addEventListener('click', function () { fileInput.click(); });
+fileInput.addEventListener('change', function () {
+  addFiles(fileInput.files);
+  fileInput.value = '';
+});
+
+// 드래그 & 드롭
+['dragenter', 'dragover'].forEach(function (ev) {
+  dropzone.addEventListener(ev, function (e) { e.preventDefault(); dropzone.classList.add('drag'); });
+});
+['dragleave', 'drop'].forEach(function (ev) {
+  dropzone.addEventListener(ev, function (e) { e.preventDefault(); dropzone.classList.remove('drag'); });
+});
+dropzone.addEventListener('drop', function (e) {
+  if (e.dataTransfer && e.dataTransfer.files) { addFiles(e.dataTransfer.files); }
+});
+// 페이지 전체에 떨어뜨려도 새 탭으로 안 열리게
+window.addEventListener('dragover', function (e) { e.preventDefault(); });
+window.addEventListener('drop', function (e) { e.preventDefault(); });
+
+// Ctrl+V 로 이미지 붙여넣기
+window.addEventListener('paste', function (e) {
+  if (!e.clipboardData) { return; }
+  var items = e.clipboardData.items;
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].type.indexOf('image/') === 0) {
+      var f = items[i].getAsFile();
+      if (f) { addImage(f); toast('붙여넣은 이미지를 추가했어요!', 'ok'); }
+    }
+  }
+});
+
+// ───────── 메모 자동 저장 (localStorage) ─────────
+var memo = document.getElementById('memo');
+var memoStatus = document.getElementById('memoStatus');
+var memoTimer = null;
+
+try { memo.value = localStorage.getItem('designBridgeMemo') || ''; } catch (e) {}
+
+memo.addEventListener('input', function () {
+  clearTimeout(memoTimer);
+  memoTimer = setTimeout(function () {
+    try {
+      localStorage.setItem('designBridgeMemo', memo.value);
+      memoStatus.textContent = '💾 자동 저장됨';
+      setTimeout(function () { memoStatus.textContent = ''; }, 2000);
+    } catch (e) {
+      memoStatus.textContent = '⚠️ 저장 실패 (시크릿 모드에서는 저장이 안 될 수 있어요)';
+    }
+  }, 500);
+});
+
+updateEmpty();
+</script>
+</body>
+</html>

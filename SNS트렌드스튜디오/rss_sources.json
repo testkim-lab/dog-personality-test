@@ -1,0 +1,30 @@
+{
+  "health": [
+    {
+      "name": "BBC Health",
+      "url": "http://feeds.bbci.co.uk/news/health/rss.xml"
+    },
+    {
+      "name": "ScienceDaily Fitness",
+      "url": "https://www.sciencedaily.com/rss/health_medicine/fitness.xml"
+    },
+    {
+      "name": "Medical News Today",
+      "url": "https://www.medicalnewstoday.com/rss/news.xml"
+    }
+  ],
+  "lifestyle": [
+    {
+      "name": "Guardian Life&Style",
+      "url": "https://www.theguardian.com/lifeandstyle/rss"
+    },
+    {
+      "name": "BBC News (Top)",
+      "url": "http://feeds.bbci.co.uk/news/rss.xml"
+    },
+    {
+      "name": "Psychology Today",
+      "url": "https://www.psychologytoday.com/intl/rss.xml"
+    }
+  ]
+}

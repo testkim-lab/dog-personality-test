@@ -1,0 +1,158 @@
+{
+  "health": [
+    {
+      "name": "BBC Health",
+      "url": "http://feeds.bbci.co.uk/news/health/rss.xml"
+    },
+    {
+      "name": "ScienceDaily Fitness",
+      "url": "https://www.sciencedaily.com/rss/health_medicine/fitness.xml"
+    },
+    {
+      "name": "NYT Health",
+      "url": "https://rss.nytimes.com/services/xml/rss/nyt/Health.xml"
+    },
+    {
+      "name": "CNN Health",
+      "url": "http://rss.cnn.com/rss/edition_health.rss"
+    },
+    {
+      "name": "NPR Health",
+      "url": "https://feeds.npr.org/1128/rss.xml"
+    },
+    {
+      "name": "Guardian Health",
+      "url": "https://www.theguardian.com/society/health/rss"
+    }
+  ],
+  "lifestyle": [
+    {
+      "name": "Guardian Life&Style",
+      "url": "https://www.theguardian.com/lifeandstyle/rss"
+    },
+    {
+      "name": "Lifehacker",
+      "url": "https://lifehacker.com/rss"
+    },
+    {
+      "name": "Psychology Today",
+      "url": "https://www.psychologytoday.com/intl/rss.xml"
+    },
+    {
+      "name": "BBC News (Top)",
+      "url": "http://feeds.bbci.co.uk/news/rss.xml"
+    }
+  ],
+  "food": [
+    {
+      "name": "Guardian Food",
+      "url": "https://www.theguardian.com/food/rss"
+    },
+    {
+      "name": "NYT Food",
+      "url": "https://rss.nytimes.com/services/xml/rss/nyt/DiningandWine.xml"
+    }
+  ],
+  "travel": [
+    {
+      "name": "Guardian Travel",
+      "url": "https://www.theguardian.com/travel/rss"
+    },
+    {
+      "name": "NYT Travel",
+      "url": "https://rss.nytimes.com/services/xml/rss/nyt/Travel.xml"
+    },
+    {
+      "name": "CNN Travel",
+      "url": "http://rss.cnn.com/rss/edition_travel.rss"
+    }
+  ],
+  "fashion": [
+    {
+      "name": "Vogue",
+      "url": "https://www.vogue.com/feed/rss"
+    },
+    {
+      "name": "Guardian Fashion",
+      "url": "https://www.theguardian.com/fashion/rss"
+    }
+  ],
+  "tech": [
+    {
+      "name": "TechCrunch",
+      "url": "https://techcrunch.com/feed/"
+    },
+    {
+      "name": "The Verge",
+      "url": "https://www.theverge.com/rss/index.xml"
+    },
+    {
+      "name": "Wired",
+      "url": "https://www.wired.com/feed/rss"
+    }
+  ],
+  "science": [
+    {
+      "name": "ScienceDaily Top",
+      "url": "https://www.sciencedaily.com/rss/top/science.xml"
+    },
+    {
+      "name": "Guardian Science",
+      "url": "https://www.theguardian.com/science/rss"
+    }
+  ],
+  "business": [
+    {
+      "name": "BBC Business",
+      "url": "http://feeds.bbci.co.uk/news/business/rss.xml"
+    },
+    {
+      "name": "CNBC Top News",
+      "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+    }
+  ],
+  "entertainment": [
+    {
+      "name": "Variety",
+      "url": "https://variety.com/feed/"
+    },
+    {
+      "name": "Guardian Culture",
+      "url": "https://www.theguardian.com/culture/rss"
+    }
+  ],
+  "sports": [
+    {
+      "name": "BBC Sport",
+      "url": "http://feeds.bbci.co.uk/sport/rss.xml"
+    },
+    {
+      "name": "ESPN Top",
+      "url": "https://www.espn.com/espn/rss/news"
+    }
+  ],
+  "world": [
+    {
+      "name": "BBC World",
+      "url": "http://feeds.bbci.co.uk/news/world/rss.xml"
+    },
+    {
+      "name": "Al Jazeera",
+      "url": "https://www.aljazeera.com/xml/rss/all.xml"
+    },
+    {
+      "name": "NPR World",
+      "url": "https://feeds.npr.org/1004/rss.xml"
+    }
+  ],
+  "pets": [
+    {
+      "name": "ScienceDaily Dogs",
+      "url": "https://www.sciencedaily.com/rss/plants_animals/dogs.xml"
+    },
+    {
+      "name": "ScienceDaily Cats",
+      "url": "https://www.sciencedaily.com/rss/plants_animals/cats.xml"
+    }
+  ]
+}
