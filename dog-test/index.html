@@ -688,68 +688,16 @@ function handleShare() {
   });
 }
 
-// 플랫폼별 공유
+// 내 결과 이미지가 아니라 "테스트 자체"를 친구에게 초대하는 순수 링크 공유
 function shareTestLink() {
-  const url = getShareUrl();
-  const text = "나에게 맞는 강아지가 뭘까? 🐶 1분 성격 테스트 해보기";
-
-  // 모달 생성
-  const modal = document.createElement("div");
-  modal.className = "modal";
-  modal.id = "shareModal-platform";
-  modal.innerHTML = `
-    <div class="modal-content" style="max-width: 300px;">
-      <button class="modal-close" onclick="this.closest('.modal').remove()">✕</button>
-      <h3>어디로 공유할까요?</h3>
-      <div style="display: flex; flex-direction: column; gap: 10px;">
-        <button onclick="shareToKakao('${text}', '${url}')" class="btn" style="background: #FFE812; color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">📱 카카오톡</button>
-        <button onclick="shareToThreads('${url}')" class="btn" style="background: #000; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">🧵 Threads</button>
-        <button onclick="shareToTwitter('${text}', '${url}')" class="btn" style="background: #000; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">𝕏 X (트위터)</button>
-        <button onclick="shareToInstagram('${url}')" class="btn" style="background: #E4405F; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">📷 인스타그램</button>
-        <button onclick="copyShareLink('${url}')" class="btn" style="background: #666; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">📋 링크 복사</button>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(modal);
-  modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
-}
-
-// 각 플랫폼별 공유 함수
-function shareToKakao(text, url) {
-  if (typeof Kakao !== 'undefined' && Kakao.initialized) {
-    Kakao.Share.sendDefault({
-      objectType: 'feed',
-      content: {
-        title: text,
-        description: '강아지 성격 테스트에서 나에게 맞는 종류를 알아보세요!',
-        imageUrl: 'https://testppang.netlify.app/dog-test/images/og-thumbnail.jpg',
-        link: { webUrl: url }
-      }
-    });
-  } else {
-    window.location.href = `kakaotalk://send?appkey=YOUR_KAKAO_APP_KEY&validationParams=&link=${encodeURIComponent(url)}`;
+  const fullText = "나에게 맞는 강아지가 뭘까? 🐶 1분 성격 테스트 해보기\n" + getShareUrl();
+  if (!navigator.share) {
+    copyShareLink("공유하려는 앱");
+    return;
   }
-  document.getElementById('shareModal-platform')?.remove();
-}
-
-function shareToThreads(url) {
-  window.open(`https://threads.net/intent/post?text=${encodeURIComponent('나에게 맞는 강아지가 뭘까? 🐶\n' + url)}`, '_blank');
-  document.getElementById('shareModal-platform')?.remove();
-}
-
-function shareToTwitter(text, url) {
-  window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(text + '\n' + url)}`, '_blank');
-  document.getElementById('shareModal-platform')?.remove();
-}
-
-function shareToInstagram(url) {
-  // 인스타는 앱 링크 지원 안 함, 기본 공유로 넘김
-  if (navigator.share) {
-    navigator.share({ title: '강아지 성격 테스트', text: '나에게 맞는 강아지가 뭘까? 🐶\n' + url });
-  } else {
-    window.open(url, '_blank');
-  }
-  document.getElementById('shareModal-platform')?.remove();
+  navigator.share({ title: "강아지 성격 테스트", text: fullText }).catch(err => {
+    if (err && err.name !== "AbortError") copyShareLink("공유하려는 앱");
+  });
 }
 </script>
 </body>
