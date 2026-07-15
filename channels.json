@@ -1,0 +1,72 @@
+{
+  "channels": [
+    {
+      "name": "바디컨피던스 계정",
+      "tone": "전문적이고 당당하며, 올바른 건강관과 바디 포지티브(자존감/기능성 운동)를 심어주는 파워풀한 톤",
+      "keywords": [
+        "운동",
+        "헬스",
+        "피트니스",
+        "다이어트",
+        "건강",
+        "근력",
+        "체형",
+        "자세",
+        "단백질",
+        "수면",
+        "스트레스",
+        "fitness",
+        "workout",
+        "health",
+        "exercise",
+        "wellness"
+      ],
+      "image_style": "Energetic, powerful, confident professional fitness style, bold natural lighting, athletic pose, body positivity",
+      "banned_words": [
+        "치료",
+        "완치",
+        "질병 예방 보장",
+        "100% 효과",
+        "부작용 없음",
+        "의사도 놀란"
+      ],
+      "naver_queries": [
+        "건강 운동",
+        "다이어트 연구",
+        "피트니스 트렌드"
+      ],
+      "rss_categories": [
+        "health"
+      ]
+    },
+    {
+      "name": "개인 일상 계정",
+      "tone": "친근하고 공감 가며, 일상 속 인사이트를 나누는 따뜻한 소통형 톤",
+      "keywords": [
+        "일상",
+        "라이프",
+        "트렌드",
+        "심리",
+        "습관",
+        "자기계발",
+        "MZ",
+        "직장",
+        "취미",
+        "여행",
+        "lifestyle",
+        "trend",
+        "habit"
+      ],
+      "image_style": "Warm, cozy, friendly lifestyle, modern and natural daily routine ambiance",
+      "banned_words": [],
+      "naver_queries": [
+        "라이프스타일 트렌드",
+        "MZ세대 일상",
+        "요즘 유행"
+      ],
+      "rss_categories": [
+        "lifestyle"
+      ]
+    }
+  ]
+}

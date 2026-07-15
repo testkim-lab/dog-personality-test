@@ -1,0 +1,64 @@
+=== 강아지 성격 테스트 이미지 크레딧 ===
+
+모든 이미지는 상업적 사용이 가능한 공개 라이선스(CC0, CC-BY, CC-BY-SA)로 제공됩니다.
+(2026-07-11 전체 재검증 완료 — 12개 전부 육안 확인함)
+
+1. corgi.jpg (웰시코기)
+   출처: Wikimedia Commons
+   URL: https://commons.wikimedia.org/wiki/File:Fawn_and_white_Welsh_Corgi_puppy_standing_on_rear_legs_and_sticking_out_the_tongue.jpg
+
+2. golden.jpg (골든리트리버)
+   출처: Wikimedia Commons
+   URL: https://commons.wikimedia.org/wiki/File:Bubbles_the_Golden_Retriever.png
+
+3. jindo.jpg (진돗개)
+   출처: Pixabay (콘텐츠 라이선스 - 상업적 사용 가능, 저작자 표시 불필요)
+   URL: https://pixabay.com/ko/photos/진돗개-백구-귀여움-한국-5103470/
+
+4. poodle.jpg (푸들)
+   출처: Pixabay (콘텐츠 라이선스 - 상업적 사용 가능, 저작자 표시 불필요)
+   URL: https://pixabay.com/ko/photos/animals-7172323/
+
+5. shihtzu.jpg (시추)
+   출처: Wikimedia Commons
+   URL: https://commons.wikimedia.org/wiki/File:Shih_Tzu_-_Star_of_Buddha.jpg
+
+6. chihuahua.jpg (치와와)
+   출처: Wikimedia Commons
+   URL: https://commons.wikimedia.org/wiki/File:Chihuahua_wikipedia.jpg
+
+7. border.jpg (보더콜리)
+   출처: Pixabay (콘텐츠 라이선스 - 상업적 사용 가능, 저작자 표시 불필요)
+   URL: https://pixabay.com/ko/photos/running-dog-747751/
+
+8. bichon.jpg (비숑프리제)
+   출처: Wikimedia Commons
+   URL: https://commons.wikimedia.org/wiki/File:Bichon_Fris%C3%A9_-_studdogbichon.jpg
+
+9. maltese.jpg (말티즈)
+   출처: Wikimedia Commons
+   URL: https://commons.wikimedia.org/wiki/File:Oyku-Maltese.jpg
+
+10. pomeranian.jpg (포메라니안)
+    출처: Pixabay (콘텐츠 라이선스 - 상업적 사용 가능, 저작자 표시 불필요)
+    URL: https://pixabay.com/ko/photos/puppy-5506147/
+
+11. dachshund.jpg (닥스훈트)
+    출처: Wikimedia Commons
+    URL: https://commons.wikimedia.org/wiki/File:Teckel_-_39.jpg
+
+12. samoyed.jpg (사모예드)
+    출처: Wikimedia Commons
+    URL: https://commons.wikimedia.org/wiki/File:Samoyed_dog_two_year_old_female_dllu.jpg
+
+13. og-thumbnail.jpg
+    용도: 소셜 미디어 공유용 썸네일 (코기 사진 사용)
+
+=== 라이선스 설명 ===
+
+- CC0: 저작권이 없는 공개 도메인 (상업적 사용 자유)
+- CC-BY: 저작자 표시만 하면 상업적 사용 가능
+- CC-BY-SA: 저작자 표시 및 동일 조건 하에서 공유 가능
+
+각 이미지의 정확한 라이선스와 저작자는 위 URL(Wikimedia Commons 파일 페이지)에서 확인 가능.
+본 크레딧 파일이 저작자 표시(Attribution) 역할을 합니다.

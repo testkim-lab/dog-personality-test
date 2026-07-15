@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>영상 → GIF 변환기</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+<style>
+  :root{
+    --bg:#101418;
+    --panel:#1a2027;
+    --panel2:#222a33;
+    --line:#2e3944;
+    --text:#e8edf2;
+    --sub:#8b98a5;
+    --accent:#39c5bb;
+    --accent-dim:#2a8f88;
+    --range:#39c5bb33;
+    --danger:#ff6b6b;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    min-height:100vh;
+    padding:24px 16px 60px;
+  }
+  .wrap{max-width:760px;margin:0 auto}
+  h1{
+    font-size:22px;font-weight:800;letter-spacing:-0.5px;
+    display:flex;align-items:center;gap:10px;margin-bottom:4px;
+  }
+  h1 .badge{
+    font-size:11px;font-weight:700;color:var(--bg);
+    background:var(--accent);padding:3px 8px;border-radius:20px;
+  }
+  .desc{color:var(--sub);font-size:13px;margin-bottom:20px}
+
+  /* 업로드 영역 */
+  #dropzone{
+    border:2px dashed var(--line);border-radius:14px;
+    padding:48px 20px;text-align:center;cursor:pointer;
+    transition:border-color .2s, background .2s;
+    background:var(--panel);
+  }
+  #dropzone:hover,#dropzone.drag{border-color:var(--accent);background:var(--panel2)}
+  #dropzone .big{font-size:15px;font-weight:600;margin-bottom:6px}
+  #dropzone .small{font-size:12px;color:var(--sub)}
+  #fileInput{display:none}
+
+  /* 에디터 */
+  #editor{display:none}
+  .card{
+    background:var(--panel);border:1px solid var(--line);
+    border-radius:14px;padding:16px;margin-bottom:14px;
+  }
+  video{
+    width:100%;border-radius:10px;background:#000;display:block;
+    max-height:420px;
+  }
+  .filename{
+    font-size:12px;color:var(--sub);margin-top:8px;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .filename button{
+    background:none;border:1px solid var(--line);color:var(--sub);
+    font-size:11px;padding:4px 10px;border-radius:8px;cursor:pointer;
+  }
+  .filename button:hover{color:var(--text);border-color:var(--sub)}
+
+  /* 타임라인 */
+  .timeline-label{
+    font-size:13px;font-weight:700;margin-bottom:10px;
+    display:flex;justify-content:space-between;align-items:baseline;
+  }
+  .timeline-label .dur{font-size:12px;color:var(--accent);font-weight:600}
+  #timeline{
+    position:relative;height:36px;background:var(--panel2);
+    border-radius:8px;cursor:pointer;overflow:hidden;
+    border:1px solid var(--line);
+  }
+  #rangeFill{
+    position:absolute;top:0;bottom:0;background:var(--range);
+    border-left:2px solid var(--accent);border-right:2px solid var(--accent);
+    pointer-events:none;
+  }
+  #playhead{
+    position:absolute;top:0;bottom:0;width:2px;background:#fff;
+    pointer-events:none;opacity:.9;
+  }
+  .setbtns{display:flex;gap:8px;margin-top:12px}
+  .setbtns button{
+    flex:1;padding:12px 8px;border-radius:10px;border:1px solid var(--line);
+    background:var(--panel2);color:var(--text);font-size:13px;font-weight:700;
+    cursor:pointer;transition:all .15s;
+  }
+  .setbtns button:hover{border-color:var(--accent);color:var(--accent)}
+  .setbtns button span{display:block;font-size:11px;color:var(--sub);font-weight:400;margin-top:3px}
+
+  .times{display:flex;gap:10px;margin-top:12px}
+  .timebox{flex:1}
+  .timebox label{font-size:11px;color:var(--sub);display:block;margin-bottom:4px}
+  .timebox input{
+    width:100%;padding:10px;border-radius:8px;border:1px solid var(--line);
+    background:var(--panel2);color:var(--text);font-size:14px;font-weight:600;
+    text-align:center;
+  }
+  .timebox input:focus{outline:none;border-color:var(--accent)}
+
+  /* 화질 */
+  .quality-title{font-size:13px;font-weight:700;margin-bottom:10px}
+  .qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .qopt{
+    border:1px solid var(--line);border-radius:10px;padding:12px 8px;
+    text-align:center;cursor:pointer;background:var(--panel2);
+    transition:all .15s;
+  }
+  .qopt.sel{border-color:var(--accent);background:var(--range)}
+  .qopt .qname{font-size:14px;font-weight:800}
+  .qopt .qinfo{font-size:11px;color:var(--sub);margin-top:4px;line-height:1.5}
+  .qopt.sel .qname{color:var(--accent)}
+
+  .estimate{
+    margin-top:12px;font-size:12px;color:var(--sub);
+    background:var(--panel2);border-radius:8px;padding:10px 12px;
+  }
+  .estimate b{color:var(--text)}
+  .estimate.warn{color:var(--danger)}
+
+  /* 만들기 버튼 */
+  #makeBtn{
+    width:100%;padding:16px;border-radius:12px;border:none;
+    background:var(--accent);color:#08302d;font-size:16px;font-weight:800;
+    cursor:pointer;transition:background .15s;
+  }
+  #makeBtn:hover{background:#4fd8ce}
+  #makeBtn:disabled{background:var(--line);color:var(--sub);cursor:not-allowed}
+
+  /* 진행률 */
+  #progressCard{display:none}
+  .pbar-wrap{height:12px;background:var(--panel2);border-radius:20px;overflow:hidden;margin-top:10px}
+  #pbar{height:100%;width:0%;background:var(--accent);border-radius:20px;transition:width .2s}
+  #ptext{font-size:13px;font-weight:600}
+  #cancelBtn{
+    margin-top:12px;width:100%;padding:10px;border-radius:10px;
+    border:1px solid var(--line);background:none;color:var(--sub);
+    font-size:13px;cursor:pointer;
+  }
+
+  /* 결과 */
+  #resultCard{display:none;text-align:center}
+  #resultImg{max-width:100%;border-radius:10px;border:1px solid var(--line)}
+  .result-info{font-size:13px;color:var(--sub);margin:10px 0 14px}
+  .result-info b{color:var(--accent);font-size:15px}
+  .result-btns{display:flex;gap:8px}
+  .result-btns a,.result-btns button{
+    flex:1;padding:14px;border-radius:10px;font-size:14px;font-weight:700;
+    cursor:pointer;text-decoration:none;text-align:center;
+  }
+  #downloadBtn{background:var(--accent);color:#08302d;border:none}
+  #againBtn{background:none;border:1px solid var(--line);color:var(--text)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>영상 → GIF 변환기 <span class="badge">내 컴퓨터에서만 처리</span></h1>
+  <div class="desc">영상이 어디 업로드되지 않아요. 브라우저 안에서 바로 변환됩니다.</div>
+
+  <!-- 업로드 -->
+  <div id="dropzone">
+    <div class="big">📁 영상 파일을 끌어다 놓거나 클릭해서 선택</div>
+    <div class="small">MP4, MOV, WebM 등 · 파일이 클수록 변환이 오래 걸려요</div>
+    <input type="file" id="fileInput" accept="video/*">
+  </div>
+
+  <!-- 에디터 -->
+  <div id="editor">
+    <div class="card">
+      <video id="video" controls playsinline></video>
+      <div class="filename">
+        <span id="fname"></span>
+        <button onclick="resetAll()">다른 영상 선택</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="timeline-label">
+        ✂️ 자를 구간
+        <span class="dur" id="rangeDur">-</span>
+      </div>
+      <div id="timeline">
+        <div id="rangeFill"></div>
+        <div id="playhead"></div>
+      </div>
+      <div class="setbtns">
+        <button onclick="setStart()">▶ 여기부터<span>재생 위치를 시작점으로</span></button>
+        <button onclick="setEnd()">⏹ 여기까지<span>재생 위치를 끝점으로</span></button>
+      </div>
+      <div class="times">
+        <div class="timebox">
+          <label>시작 (초)</label>
+          <input type="number" id="startInput" step="0.1" min="0" value="0">
+        </div>
+        <div class="timebox">
+          <label>끝 (초)</label>
+          <input type="number" id="endInput" step="0.1" min="0" value="0">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="quality-title">🎨 화질 선택</div>
+      <div class="qgrid">
+        <div class="qopt" data-q="high" onclick="selectQuality('high')">
+          <div class="qname">상</div>
+          <div class="qinfo">가로 480px<br>15fps · 부드러움</div>
+        </div>
+        <div class="qopt sel" data-q="mid" onclick="selectQuality('mid')">
+          <div class="qname">중</div>
+          <div class="qinfo">가로 360px<br>12fps · 무난함</div>
+        </div>
+        <div class="qopt" data-q="low" onclick="selectQuality('low')">
+          <div class="qname">하</div>
+          <div class="qinfo">가로 240px<br>8fps · 가벼움</div>
+        </div>
+      </div>
+      <div class="estimate" id="estimate">구간과 화질을 정하면 예상 정보가 표시돼요</div>
+    </div>
+
+    <button id="makeBtn" onclick="makeGif()">GIF 만들기</button>
+
+    <div class="card" id="progressCard">
+      <div id="ptext">준비 중...</div>
+      <div class="pbar-wrap"><div id="pbar"></div></div>
+      <button id="cancelBtn" onclick="cancelJob()">취소</button>
+    </div>
+
+    <div class="card" id="resultCard">
+      <img id="resultImg" alt="완성된 GIF">
+      <div class="result-info">완성! 파일 크기 <b id="fileSize">-</b></div>
+      <div class="result-btns">
+        <a id="downloadBtn" download="output.gif">💾 GIF 저장</a>
+        <button id="againBtn" onclick="hideResult()">다시 만들기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUALITY = {
+  high: { width: 480, fps: 15, gifq: 8  },
+  mid:  { width: 360, fps: 12, gifq: 10 },
+  low:  { width: 240, fps: 8,  gifq: 14 }
+};
+let quality = 'mid';
+let videoURL = null;
+let workerURL = null;
+let cancelled = false;
+let currentGif = null;
+let origName = 'video';
+
+const video = document.getElementById('video');
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+const startInput = document.getElementById('startInput');
+const endInput = document.getElementById('endInput');
+
+// ---------- 업로드 ----------
+dropzone.onclick = () => fileInput.click();
+dropzone.ondragover = e => { e.preventDefault(); dropzone.classList.add('drag'); };
+dropzone.ondragleave = () => dropzone.classList.remove('drag');
+dropzone.ondrop = e => {
+  e.preventDefault(); dropzone.classList.remove('drag');
+  if (e.dataTransfer.files[0]) loadVideo(e.dataTransfer.files[0]);
+};
+fileInput.onchange = () => { if (fileInput.files[0]) loadVideo(fileInput.files[0]); };
+
+function loadVideo(file) {
+  if (!file.type.startsWith('video/')) { alert('영상 파일이 아니에요!'); return; }
+  if (videoURL) URL.revokeObjectURL(videoURL);
+  videoURL = URL.createObjectURL(file);
+  origName = file.name.replace(/\.[^.]+$/, '');
+  video.src = videoURL;
+  document.getElementById('fname').textContent = file.name + ' (' + (file.size/1024/1024).toFixed(1) + 'MB)';
+  video.onloadedmetadata = () => {
+    dropzone.style.display = 'none';
+    document.getElementById('editor').style.display = 'block';
+    startInput.value = 0;
+    endInput.value = Math.min(3, video.duration).toFixed(1);
+    endInput.max = startInput.max = video.duration.toFixed(1);
+    updateRange();
+  };
+}
+
+function resetAll() {
+  document.getElementById('editor').style.display = 'none';
+  dropzone.style.display = 'block';
+  hideResult();
+  fileInput.value = '';
+  video.pause();
+}
+
+// ---------- 구간 설정 ----------
+function setStart() {
+  startInput.value = video.currentTime.toFixed(1);
+  if (+endInput.value <= +startInput.value)
+    endInput.value = Math.min(+startInput.value + 3, video.duration).toFixed(1);
+  updateRange();
+}
+function setEnd() {
+  endInput.value = video.currentTime.toFixed(1);
+  if (+startInput.value >= +endInput.value)
+    startInput.value = Math.max(+endInput.value - 3, 0).toFixed(1);
+  updateRange();
+}
+startInput.oninput = updateRange;
+endInput.oninput = updateRange;
+
+function updateRange() {
+  const s = +startInput.value, e = +endInput.value, d = video.duration || 1;
+  const fill = document.getElementById('rangeFill');
+  fill.style.left = (s/d*100) + '%';
+  fill.style.width = (Math.max(e-s,0)/d*100) + '%';
+  const len = Math.max(e - s, 0);
+  document.getElementById('rangeDur').textContent = len.toFixed(1) + '초 선택됨';
+  updateEstimate();
+}
+
+// 타임라인 클릭 → 해당 위치로 이동
+document.getElementById('timeline').onclick = e => {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const ratio = (e.clientX - rect.left) / rect.width;
+  video.currentTime = ratio * video.duration;
+};
+video.ontimeupdate = () => {
+  const d = video.duration || 1;
+  document.getElementById('playhead').style.left = (video.currentTime/d*100) + '%';
+};
+
+// ---------- 화질 ----------
+function selectQuality(q) {
+  quality = q;
+  document.querySelectorAll('.qopt').forEach(el =>
+    el.classList.toggle('sel', el.dataset.q === q));
+  updateEstimate();
+}
+
+function updateEstimate() {
+  const s = +startInput.value, e = +endInput.value;
+  const len = e - s;
+  const est = document.getElementById('estimate');
+  if (len <= 0) { est.textContent = '끝 시간이 시작보다 커야 해요'; est.classList.add('warn'); return; }
+  const q = QUALITY[quality];
+  const frames = Math.ceil(len * q.fps);
+  // 대략적인 크기 추정 (프레임당 픽셀 기반)
+  const h = video.videoWidth ? Math.round(q.width * video.videoHeight / video.videoWidth) : q.width * 0.56;
+  const estMB = (frames * q.width * h * 0.12 / 1024 / 1024).toFixed(1);
+  est.classList.toggle('warn', len > 15);
+  est.innerHTML = `총 <b>${frames}프레임</b> · 예상 크기 약 <b>${estMB}MB</b>` +
+    (len > 15 ? '<br>⚠️ 15초 넘으면 파일이 크고 변환도 오래 걸려요. 구간을 줄이는 걸 추천!' : '');
+}
+
+// ---------- GIF 워커 준비 (CDN 워커를 blob으로 변환) ----------
+async function getWorkerURL() {
+  if (workerURL) return workerURL;
+  const res = await fetch('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js');
+  const blob = await res.blob();
+  workerURL = URL.createObjectURL(blob);
+  return workerURL;
+}
+
+// ---------- GIF 생성 ----------
+async function makeGif() {
+  const s = +startInput.value, e = +endInput.value;
+  if (e <= s) { alert('끝 시간이 시작 시간보다 커야 해요!'); return; }
+  if (e > video.duration + 0.01) { alert('끝 시간이 영상 길이를 넘었어요!'); return; }
+
+  const q = QUALITY[quality];
+  const w = q.width;
+  const h = Math.round(w * video.videoHeight / video.videoWidth);
+  const frameCount = Math.ceil((e - s) * q.fps);
+  const delay = Math.round(1000 / q.fps);
+
+  cancelled = false;
+  video.pause();
+  document.getElementById('makeBtn').disabled = true;
+  document.getElementById('progressCard').style.display = 'block';
+  document.getElementById('resultCard').style.display = 'none';
+  setProgress(0, '프레임 추출 중... (0/' + frameCount + ')');
+
+  const canvas = document.createElement('canvas');
+  canvas.width = w; canvas.height = h;
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+  let worker;
+  try { worker = await getWorkerURL(); }
+  catch(err) { alert('변환 엔진 로딩 실패. 인터넷 연결을 확인해주세요.'); resetJobUI(); return; }
+
+  const gif = new GIF({
+    workers: 2,
+    quality: q.gifq,
+    width: w,
+    height: h,
+    workerScript: worker
+  });
+  currentGif = gif;
+
+  // 프레임 추출 (시크 → 캡처)
+  for (let i = 0; i < frameCount; i++) {
+    if (cancelled) { resetJobUI(); return; }
+    const t = s + i / q.fps;
+    await seekTo(t);
+    ctx.drawImage(video, 0, 0, w, h);
+    gif.addFrame(ctx, { copy: true, delay: delay });
+    setProgress((i+1)/frameCount * 50, '프레임 추출 중... (' + (i+1) + '/' + frameCount + ')');
+  }
+
+  if (cancelled) { resetJobUI(); return; }
+
+  gif.on('progress', p => {
+    if (!cancelled) setProgress(50 + p*50, 'GIF 압축 중... ' + Math.round(p*100) + '%');
+  });
+  gif.on('finished', blob => {
+    if (cancelled) return;
+    const url = URL.createObjectURL(blob);
+    document.getElementById('resultImg').src = url;
+    const dl = document.getElementById('downloadBtn');
+    dl.href = url;
+    dl.download = origName + '.gif';
+    document.getElementById('fileSize').textContent = (blob.size/1024/1024).toFixed(2) + 'MB';
+    document.getElementById('progressCard').style.display = 'none';
+    document.getElementById('resultCard').style.display = 'block';
+    document.getElementById('makeBtn').disabled = false;
+    document.getElementById('resultCard').scrollIntoView({ behavior:'smooth' });
+  });
+  gif.render();
+}
+
+function seekTo(t) {
+  return new Promise(resolve => {
+    let done = false;
+    const finish = () => { if (!done) { done = true; video.removeEventListener('seeked', finish); resolve(); } };
+    video.addEventListener('seeked', finish);
+    video.currentTime = t;
+    setTimeout(finish, 1000); // 시크가 안 끝나도 1초 후 진행
+  });
+}
+
+function setProgress(pct, text) {
+  document.getElementById('pbar').style.width = pct + '%';
+  document.getElementById('ptext').textContent = text;
+}
+
+function cancelJob() {
+  cancelled = true;
+  if (currentGif) { try { currentGif.abort(); } catch(e){} }
+  resetJobUI();
+}
+
+function resetJobUI() {
+  document.getElementById('progressCard').style.display = 'none';
+  document.getElementById('makeBtn').disabled = false;
+}
+
+function hideResult() {
+  document.getElementById('resultCard').style.display = 'none';
+}
+</script>
+</body>
+</html>
