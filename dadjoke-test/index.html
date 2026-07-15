@@ -90,7 +90,9 @@
   .result-type { font-size: 14px; color: var(--accent); font-weight: 700; margin: 0; text-align: center; }
   .result-name { font-size: 24px; font-weight: 800; margin: 4px 0 10px; text-align: center; }
   .result-score { font-size: 32px; font-weight: 800; color: var(--accent-deep); margin: 0; text-align: center; }
-  .result-correct { font-size: 14px; color: var(--ink-soft); margin: 2px 0 16px; text-align: center; }
+  .result-correct { font-size: 14px; color: var(--ink-soft); margin: 2px 0 6px; text-align: center; }
+  .result-percentile { font-size: 15px; font-weight: 800; color: var(--accent-deep); margin: 0 0 4px; text-align: center; }
+  .result-combo { font-size: 13px; color: #ff6f00; font-weight: 700; margin: 0 0 16px; text-align: center; }
   .result-desc { font-size: 15px; margin: 0 0 16px; text-align: center; }
   .share-row { display: flex; gap: 8px; margin-top: 14px; }
   .share-row .btn { margin-top: 0; font-size: 15px; padding: 12px; }
@@ -112,6 +114,7 @@
   .fb-icon { font-size: 52px; text-align: center; margin-bottom: 4px; }
   .fb-title { font-size: 20px; font-weight: 800; text-align: center; margin: 0 0 14px; }
   .fb-answer { font-size: 15px; font-weight: 700; color: var(--accent-deep); text-align: center; margin: 0 0 10px; }
+  .fb-combo { font-size: 14px; font-weight: 800; color: #ff6f00; text-align: center; margin: 0 0 10px; }
   .fb-explain { font-size: 14px; color: var(--ink); background: var(--bg); border-radius: 10px; padding: 12px 14px; margin: 0 0 18px; }
   .share-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .share-btn {
@@ -136,7 +139,7 @@
 <body>
 <div class="wrap">
   <header>
-    <p class="eyebrow">무료 아재력 진단 · 1분 소요</p>
+    <p class="eyebrow">무료 아재력 진단 · 2분 소요</p>
     <h1>아재개그 레벨 테스트 😎</h1>
     <p class="sub">20문제로 알아보는 나의 아재력, 신입일까 회장급일까?</p>
   </header>
@@ -177,6 +180,8 @@
     <p class="result-name" id="r-title"></p>
     <p class="result-score" id="r-score"></p>
     <p class="result-correct" id="r-correct"></p>
+    <p class="result-percentile" id="r-percentile"></p>
+    <p class="result-combo" id="r-combo"></p>
     <p class="result-desc" id="r-desc"></p>
 
     <div class="share-row">
@@ -205,6 +210,7 @@
       <div class="fb-icon" id="fb-icon"></div>
       <p class="fb-title" id="fb-title"></p>
       <p class="fb-answer" id="fb-answer"></p>
+      <p class="fb-combo hidden" id="fb-combo"></p>
       <div class="fb-explain" id="fb-explain"></div>
       <button class="btn" onclick="nextQuestion()">다음 문제 →</button>
     </div>
@@ -284,6 +290,8 @@ let score = 0;
 let answered = false;
 let timerInterval = null;
 let timeLeft = 10;
+let combo = 0;
+let maxCombo = 0;
 
 function shuffle(arr) {
   const a = arr.slice();
@@ -365,7 +373,13 @@ function pick(isCorrect, chosenText, btnEl) {
     else if (b === btnEl) b.classList.add("wrong");
   });
 
-  if (isCorrect) score += 5;
+  if (isCorrect) {
+    score += 5;
+    combo++;
+    maxCombo = Math.max(maxCombo, combo);
+  } else {
+    combo = 0;
+  }
   showFeedback(isCorrect, item, chosenText);
 }
 
@@ -374,6 +388,15 @@ function showFeedback(isCorrect, item, chosenText) {
   document.getElementById("fb-title").textContent = isCorrect ? "정답입니다!" : (chosenText === null ? "시간 초과!" : "아쉬워요, 오답!");
   document.getElementById("fb-answer").textContent = "정답: " + item.correct;
   document.getElementById("fb-explain").textContent = item.explain;
+
+  const comboEl = document.getElementById("fb-combo");
+  if (isCorrect && combo >= 3) {
+    comboEl.textContent = `🔥 ${combo}연속 정답!`;
+    comboEl.classList.remove("hidden");
+  } else {
+    comboEl.classList.add("hidden");
+  }
+
   document.getElementById("feedback-modal").classList.remove("hidden");
 }
 
@@ -395,6 +418,11 @@ function getGrade(s) {
     desc:"축하합니다, 이성을 완전히 내려놓은 자만이 도달하는 경지! 당신은 명실상부 아재개그 황제입니다." };
 }
 
+// 실제 통계가 아니라 점수가 높을수록 더 희귀하게 느껴지도록 만든 재미용 추정치
+function getPercentile(s) {
+  return Math.max(2, Math.round(92 - s * 0.9));
+}
+
 function showResult() {
   document.getElementById("screen-quiz").classList.add("hidden");
   document.getElementById("screen-result").classList.remove("hidden");
@@ -405,6 +433,8 @@ function showResult() {
   document.getElementById("r-title").textContent = g.title;
   document.getElementById("r-score").textContent = score + "점";
   document.getElementById("r-correct").textContent = `${score / 5} / ${QUESTIONS.length}문제 정답 (100점 만점)`;
+  document.getElementById("r-percentile").textContent = `상위 ${getPercentile(score)}%의 아재력`;
+  document.getElementById("r-combo").textContent = maxCombo >= 3 ? `🔥 최고 콤보 ${maxCombo}연속 정답` : "";
   document.getElementById("r-desc").textContent = g.desc;
   window.scrollTo({ top: 0 });
 }
@@ -423,7 +453,7 @@ function getShareUrl() {
 
 function getShareText() {
   const g = getGrade(score);
-  return `나의 아재력은 「${g.grade} ${g.title}」(${score}점)! 너는 몇 점일까? 😎`;
+  return `나의 아재력은 「${g.grade} ${g.title}」(${score}점, 상위 ${getPercentile(score)}%)! 너는 몇 점일까? 😎`;
 }
 
 function copyShareLink(appName) {
@@ -527,10 +557,23 @@ function drawShareCanvas(g) {
   ctx.font = "28px 'Malgun Gothic', sans-serif";
   ctx.fillText(`${score / 5}문제 정답 / ${QUESTIONS.length}문제`, cx, 774);
 
+  let statY = 820;
+  ctx.fillStyle = "#a83a22";
+  ctx.font = "bold 30px 'Malgun Gothic', sans-serif";
+  ctx.fillText(`상위 ${getPercentile(score)}%의 아재력`, cx, statY);
+  statY += 44;
+
+  if (maxCombo >= 3) {
+    ctx.fillStyle = "#ff6f00";
+    ctx.font = "bold 26px 'Malgun Gothic', sans-serif";
+    ctx.fillText(`🔥 최고 콤보 ${maxCombo}연속 정답`, cx, statY);
+    statY += 44;
+  }
+
   ctx.fillStyle = "#3a2e1f";
   ctx.font = "26px 'Malgun Gothic', sans-serif";
   const descLines = wrapLines(ctx, g.desc, W - 180);
-  drawLines(ctx, descLines, cx, 850, 40);
+  drawLines(ctx, descLines, cx, statY, 40);
 
   ctx.fillStyle = "#d94f30";
   ctx.fillRect(0, H - 140, W, 140);
